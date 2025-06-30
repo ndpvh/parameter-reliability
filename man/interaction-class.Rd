@@ -25,5 +25,8 @@ class.
 \item{\code{parameters}}{Numeric vector containing the values of the parameters of 
 the model, namely \eqn{a}, \eqn{b}, \eqn{c}, and \eqn{d} in this order. If left 
 unspecified, the model will default to \code{c(0, 0, 0, 0)}.}
+
+\item{\code{sd}}{Numeric defining the error around the deterministic part defined by 
+the slot \code{parameters}. If left unspecified, will default to \code{1}}
 }}
 

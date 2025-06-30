@@ -17,5 +17,8 @@ is solely defined by its parameters and the error around it.
 \describe{
 \item{\code{parameters}}{Numeric vector containing the values of the parameters of 
 the model.}
+
+\item{\code{sd}}{Numeric defining the error around the deterministic part defined by 
+the slot \code{parameters}}
 }}
 

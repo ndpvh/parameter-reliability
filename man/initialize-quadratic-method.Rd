@@ -4,7 +4,7 @@
 \alias{initialize,quadratic-method}
 \title{Constructor for the \code{\link[paramrel]{quadratic-class}}}
 \usage{
-\S4method{initialize}{quadratic}(.Object, parameters = c(0, 0, 0))
+\S4method{initialize}{quadratic}(.Object, parameters = c(0, 0, 0), sd = 1)
 }
 \arguments{
 \item{parameters}{Numeric vector containing the values of the parameters of 
