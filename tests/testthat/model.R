@@ -28,6 +28,22 @@ testthat::test_that(
     }
 )
 
+# Warnings
+testthat::test_that(
+    "Check known warnings: Too many standard deviations",
+    {
+        params <- 1:10
+        sd <- rep(1, 10)
+
+        testthat::expect_warning(paramrel::linear(params[1:2], sd = sd))
+        testthat::expect_warning(paramrel::quadratic(params[1:3], sd = sd))
+        testthat::expect_warning(paramrel::main(params[1:3], sd = sd))
+        testthat::expect_warning(paramrel::interaction(params[1:4], sd = sd))
+        testthat::expect_warning(paramrel::autoregressive(params[1:2], sd = sd))
+        testthat::expect_warning(paramrel::arx(params[1:3], sd = sd))
+    }
+)
+
 # Output
 testthat::test_that(
     "Check output of initialization",
@@ -56,6 +72,8 @@ testthat::test_that(
         ref <- rep(1, 3)
         tst <- paramrel::arx(ref)
         testthat::expect_equal(tst@parameters, ref)
+
+
 
         # Too many parameters provided
         params <- 1:10
@@ -89,5 +107,35 @@ testthat::test_that(
         tst <- paramrel::arx(params) %>%
             suppressWarnings()
         testthat::expect_equal(tst@parameters, ref)
+
+
+
+        # Too many standard deviations provided
+        sd <- 1:10
+        ref <- 1
+
+        tst <- paramrel::linear(params[1:2], sd = sd) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@sd, ref)
+
+        tst <- paramrel::quadratic(params[1:3], sd = sd) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@sd, ref)
+
+        tst <- paramrel::main(params[1:3], sd = sd) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@sd, ref)
+
+        tst <- paramrel::interaction(params[1:4], sd = sd) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@sd, ref)
+
+        tst <- paramrel::autoregressive(params[1:2], sd = sd) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@sd, ref)
+
+        tst <- paramrel::arx(params[1:3], sd = sd) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@sd, ref)
     }
 )
