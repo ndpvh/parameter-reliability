@@ -14,6 +14,8 @@
 #'
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}
 #' 
 #' @rdname model-class
 #'
@@ -21,8 +23,24 @@
 model <- setClass(
     "model",
     slots = list(
-        parameters = "numeric"
+        parameters = "numeric",
+        sd = "numeric"
     )
+)
+
+setMethod(
+    "initialize",
+    "model",
+    function(.Object,
+             parameters = c(0, 0, 0),
+             sd = 1) {
+        
+        # Assigning the parameters
+        .Object@parameters <- parameters
+        .Object@sd <- sd 
+
+        return(.Object)
+    }
 )
 
 
@@ -43,16 +61,15 @@ model <- setClass(
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, 
 #' the model will default to \code{c(0, 0)}. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @rdname linear-class
 #'
 #' @export
 linear <- setClass(
     "linear",
-    slots = list(
-        parameters = "numeric"
-    ),
-    contains = "model"
+    contains = c("model")
 )
 
 #' Constructor for the \code{\link[paramrel]{linear-class}}
@@ -60,13 +77,16 @@ linear <- setClass(
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, 
 #' the parameters will default to \code{c(0, 0)}. 
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
     "initialize",
     "linear",
     function(.Object,
-             parameters = c(0, 0)) {
+             parameters = c(0, 0),
+             sd = 1) {
 
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 2) {
@@ -81,7 +101,12 @@ setMethod(
         }
         
         # Assigning the parameters
-        .Object@parameters <- parameters 
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
         return(.Object)
     }
 )
@@ -105,16 +130,15 @@ setMethod(
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @rdname quadratic-class
 #'
 #' @export
 quadratic <- setClass(
     "quadratic",
-    slots = list(
-        parameters = "numeric"
-    ),
-    contains = "model"
+    contains = c("model")
 )
 
 #' Constructor for the \code{\link[paramrel]{quadratic-class}}
@@ -128,7 +152,8 @@ setMethod(
     "initialize",
     "quadratic",
     function(.Object,
-             parameters = c(0, 0, 0)) {
+             parameters = c(0, 0, 0),
+             sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 3) {
@@ -143,7 +168,12 @@ setMethod(
         }
         
         # Assigning the parameters
-        .Object@parameters <- parameters 
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
         return(.Object)
     }
 )
@@ -167,16 +197,15 @@ setMethod(
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @rdname main-class
 #'
 #' @export
 main <- setClass(
     "main",
-    slots = list(
-        parameters = "numeric"
-    ),
-    contains = "model"
+    contains = c("model")
 )
 
 #' Constructor for the \code{\link[paramrel]{main-class}}
@@ -184,13 +213,16 @@ main <- setClass(
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}. 
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
     "initialize",
     "main",
     function(.Object,
-             parameters = c(0, 0, 0)) {
+             parameters = c(0, 0, 0),
+             sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 3) {
@@ -205,7 +237,12 @@ setMethod(
         }
         
         # Assigning the parameters
-        .Object@parameters <- parameters 
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
         return(.Object)
     }
 )
@@ -230,16 +267,15 @@ setMethod(
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, \eqn{c}, and \eqn{d} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0, 0)}. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @rdname interaction-class
 #'
 #' @export
 interaction <- setClass(
     "interaction",
-    slots = list(
-        parameters = "numeric"
-    ),
-    contains = "model"
+    contains = c("model")
 )
 
 #' Constructor for the \code{\link[paramrel]{interaction-class}}
@@ -247,13 +283,16 @@ interaction <- setClass(
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, \eqn{c}, and \eqn{d} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0, 0)}.
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
     "initialize",
     "interaction",
     function(.Object,
-             parameters = c(0, 0, 0, 0)) {
+             parameters = c(0, 0, 0, 0),
+             sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 4) {
@@ -268,7 +307,12 @@ setMethod(
         }
         
         # Assigning the parameters
-        .Object@parameters <- parameters 
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
         return(.Object)
     }
 )
@@ -292,16 +336,15 @@ setMethod(
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, the 
 #' model will default to \code{c(0, 0)}. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @rdname autoregressive-class
 #'
 #' @export
 autoregressive <- setClass(
     "autoregressive",
-    slots = list(
-        parameters = "numeric"
-    ),
-    contains = "model"
+    contains = c("model")
 )
 
 #' Constructor for the \code{\link[paramrel]{autoregressive-class}}
@@ -309,13 +352,16 @@ autoregressive <- setClass(
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, the 
 #' model will default to \code{c(0, 0)}.
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
     "initialize",
     "autoregressive",
     function(.Object,
-             parameters = c(0, 0)) {
+             parameters = c(0, 0),
+             sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 2) {
@@ -330,7 +376,12 @@ setMethod(
         }
         
         # Assigning the parameters
-        .Object@parameters <- parameters 
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
         return(.Object)
     }
 )
@@ -354,16 +405,15 @@ setMethod(
 #' @slot parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}.
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @rdname arx-class
 #'
 #' @export
 arx <- setClass(
     "arx",
-    slots = list(
-        parameters = "numeric"
-    ),
-    contains = "model"
+    contains = c("model")
 )
 
 #' Constructor for the \code{\link[paramrel]{arx-class}}
@@ -371,13 +421,16 @@ arx <- setClass(
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}.
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
     "initialize",
     "arx",
     function(.Object,
-             parameters = c(0, 0, 0)) {
+             parameters = c(0, 0, 0),
+             sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 3) {
@@ -392,7 +445,12 @@ setMethod(
         }
         
         # Assigning the parameters
-        .Object@parameters <- parameters 
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
         return(.Object)
     }
 )
