@@ -6,6 +6,29 @@
 
 
 
+#' An S4 Class to Represent all Models.
+#' 
+#' @details
+#' Defines the \code{model} class, to which all other models belong. This class 
+#' is solely defined by its parameters and the error around it.
+#'
+#' @slot parameters Numeric vector containing the values of the parameters of 
+#' the model. 
+#' 
+#' @rdname model-class
+#'
+#' @export
+model <- setClass(
+    "model",
+    slots = list(
+        parameters = "numeric"
+    )
+)
+
+
+
+
+
 #' An S4 Class to Represent the Linear Model.
 #' 
 #' @details
@@ -28,7 +51,8 @@ linear <- setClass(
     "linear",
     slots = list(
         parameters = "numeric"
-    )
+    ),
+    contains = "model"
 )
 
 #' Constructor for the \code{\link[paramrel]{linear-class}}
@@ -89,7 +113,8 @@ quadratic <- setClass(
     "quadratic",
     slots = list(
         parameters = "numeric"
-    )
+    ),
+    contains = "model"
 )
 
 #' Constructor for the \code{\link[paramrel]{quadratic-class}}
@@ -150,7 +175,8 @@ main <- setClass(
     "main",
     slots = list(
         parameters = "numeric"
-    )
+    ),
+    contains = "model"
 )
 
 #' Constructor for the \code{\link[paramrel]{main-class}}
@@ -212,7 +238,8 @@ interaction <- setClass(
     "interaction",
     slots = list(
         parameters = "numeric"
-    )
+    ),
+    contains = "model"
 )
 
 #' Constructor for the \code{\link[paramrel]{interaction-class}}
@@ -273,7 +300,8 @@ autoregressive <- setClass(
     "autoregressive",
     slots = list(
         parameters = "numeric"
-    )
+    ),
+    contains = "model"
 )
 
 #' Constructor for the \code{\link[paramrel]{autoregressive-class}}
@@ -334,7 +362,8 @@ arx <- setClass(
     "arx",
     slots = list(
         parameters = "numeric"
-    )
+    ),
+    contains = "model"
 )
 
 #' Constructor for the \code{\link[paramrel]{arx-class}}
