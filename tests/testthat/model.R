@@ -1,0 +1,93 @@
+# Errors
+testthat::test_that(
+    "Check known errors: Too few parameters",
+    {
+        params <- rep(1, 1)
+
+        testthat::expect_error(paramrel::linear(params))
+        testthat::expect_error(paramrel::quadratic(params))
+        testthat::expect_error(paramrel::main(params))
+        testthat::expect_error(paramrel::interaction(params))
+        testthat::expect_error(paramrel::autoregressive(params))
+        testthat::expect_error(paramrel::arx(params))
+    }
+)
+
+# Warnings
+testthat::test_that(
+    "Check known warnings: Too many parameters",
+    {
+        params <- rep(1, 10)
+
+        testthat::expect_warning(paramrel::linear(params))
+        testthat::expect_warning(paramrel::quadratic(params))
+        testthat::expect_warning(paramrel::main(params))
+        testthat::expect_warning(paramrel::interaction(params))
+        testthat::expect_warning(paramrel::autoregressive(params))
+        testthat::expect_warning(paramrel::arx(params))
+    }
+)
+
+# Output
+testthat::test_that(
+    "Check output of initialization",
+    {
+        # Correct number of provided parameters
+        ref <- rep(1, 2)
+        tst <- paramrel::linear(ref)
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- rep(1, 3)
+        tst <- paramrel::quadratic(ref)
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- rep(1, 3)
+        tst <- paramrel::main(ref)
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- rep(1, 4)
+        tst <- paramrel::interaction(ref)
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- rep(1, 2)
+        tst <- paramrel::autoregressive(ref)
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- rep(1, 3)
+        tst <- paramrel::arx(ref)
+        testthat::expect_equal(tst@parameters, ref)
+
+        # Too many parameters provided
+        params <- 1:10
+
+        ref <- params[1:2]
+        tst <- paramrel::linear(params) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- params[1:3]
+        tst <- paramrel::quadratic(params) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- params[1:3]
+        tst <- paramrel::main(params) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- params[1:4]
+        tst <- paramrel::interaction(params) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- params[1:2]
+        tst <- paramrel::autoregressive(params) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@parameters, ref)
+
+        ref <- params[1:3]
+        tst <- paramrel::arx(params) %>%
+            suppressWarnings()
+        testthat::expect_equal(tst@parameters, ref)
+    }
+)
