@@ -32,8 +32,14 @@ setMethod(
     "initialize",
     "model",
     function(.Object,
-             parameters = c(0, 0, 0),
+             parameters,
              sd = 1) {
+
+        # Check if there is only a singular standard deviation
+        if(length(sd) > 1) {
+            warning("Too many standard deviations provided for the model. Selecting only the first.")
+            sd <- sd[1]
+        }
         
         # Assigning the parameters
         .Object@parameters <- parameters
