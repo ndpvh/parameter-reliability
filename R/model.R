@@ -28,11 +28,19 @@ model <- setClass(
     )
 )
 
+#' Constructor for the \code{\link[paramrel]{model-class}}
+#' 
+#' @param parameters Numeric vector containing the values of the parameters of 
+#' the model. If left unspecified, an empty numeric vector. 
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
+#' 
+#' @export
 setMethod(
     "initialize",
     "model",
     function(.Object,
-             parameters,
+             parameters = numeric(0),
              sd = 1) {
 
         # Check if there is only a singular standard deviation
