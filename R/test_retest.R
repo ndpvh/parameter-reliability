@@ -53,9 +53,9 @@ parameter_grid <- function(model,
         params[, i] <- rep(
             rep(
                 seq(bnd[i, 1], bnd[i, 2], length.out = n[i]),
-                times = i
+                times = prod(n[-i])^(i - 1)
             ),
-            each = k - i + 1
+            each = n[i]^(k - i)
         )
     }
 
