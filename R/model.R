@@ -233,15 +233,15 @@ setMethod(
              sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
-        if(length(parameters) < 3) {
+        if(length(parameters) < 4) {
             stop("Too few parameters provided for the cubic class. Cannot proceed.")
         }
 
         # Check if there are too many parameters. If so, we throw a warning
         # and only select the first few values
-        if(length(parameters) > 3) {
+        if(length(parameters) > 4) {
             warning("Too many parameters provided for the cubic class. Selecting the first 4.")
-            parameters <- parameters[1:3]
+            parameters <- parameters[1:4]
         }
         
         # Assigning the parameters
