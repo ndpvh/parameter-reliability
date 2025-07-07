@@ -401,7 +401,7 @@ setMethod(
 #' An S4 Class to Represent the Autoregressive Model.
 #' 
 #' @details
-#' Defines the \code{autoregressive} class, which states that for a given dependent
+#' Defines the \code{ar1} class, which states that for a given dependent
 #' variable \eqn{y}, the previous values of this variable in part determine 
 #' current values of the variable:
 #' 
@@ -416,11 +416,11 @@ setMethod(
 #' @slot sd Numeric defining the error around the deterministic part defined by 
 #' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
-#' @rdname autoregressive-class
+#' @rdname ar1-class
 #'
 #' @export
-autoregressive <- setClass(
-    "autoregressive",
+ar1 <- setClass(
+    "ar1",
     contains = c("model")
 )
 
