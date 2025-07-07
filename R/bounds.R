@@ -84,7 +84,7 @@ setMethod(
 #' @rdname bounds-method
 setMethod(
     "bounds",
-    "main",
+    "main_effect",
     function(model, 
              intercept = c(-10, 10),
              slope = c(-5, 5)) {

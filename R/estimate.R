@@ -101,7 +101,7 @@ setMethod(
 #' @rdname estimate-method
 setMethod(
     "estimate",
-    "main",
+    "main_effect",
     function(model,
              data) {
 
@@ -110,7 +110,7 @@ setMethod(
             stop("The relevant columns y and/or x and/or z are not present in the data. Cannot proceed.")
         }
 
-        # Estimate the main effects model
+        # Estimate the main_effect effects model
         fit <- lm(
             y ~ x + z,
             data = data
@@ -119,7 +119,7 @@ setMethod(
         # Create a model with the estimated parameters and create the output
         output <- list(
             "fit" = fit, 
-            "model" = main(
+            "model" = main_effect(
                 parameters = as.numeric(fit$coefficients),
                 sd = sd(fit$residuals)
             )

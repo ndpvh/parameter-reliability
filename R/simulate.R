@@ -13,7 +13,7 @@
 #' variables. For \code{\link[param-rel]{linear-class}}, 
 #' \code{\link[param-rel]{quadratic-class}}, \code{\link[param-rel]{arx-class}},
 #' a numeric vector suffices, as only one independent variable is required. For 
-#' \code{\link[param-rel]{main-class}} and 
+#' \code{\link[param-rel]{main_effect-class}} and 
 #' \code{\link[param-rel]{interaction-class}}, a matrix is needed instead, where 
 #' the first column is taken to be \eqn{x} (paired with parameter \eqn{b}) and 
 #' the second column is taken to be \eqn{z} (paired with parameter \eqn{c}). For
@@ -154,7 +154,7 @@ setMethod(
 #' @rdname simulate-method
 setMethod(
     "simulate",
-    "main",
+    "main_effect",
     function(model,
              X = NULL,
              Xfun = \(x) runif(x, -2, 2),
@@ -173,7 +173,7 @@ setMethod(
         # Check whether X is a numeric vector or a matrix. If a vector, cannot
         # proceed
         if(is.null(ncol(X))) {
-            stop("X is a numeric vector, but the main effects model needs more than one independent variable. Cannot proceed.")
+            stop("X is a numeric vector, but the main_effect effects model needs more than one independent variable. Cannot proceed.")
         }
 
         # If more than 2 columns, throw a warning and select the first 2 columns 
@@ -229,7 +229,7 @@ setMethod(
         # Check whether X is a numeric vector or a matrix. If a vector, cannot
         # proceed
         if(is.null(ncol(X))) {
-            stop("X is a numeric vector, but the main effects model needs more than one independent variable. Cannot proceed.")
+            stop("X is a numeric vector, but the main_effect effects model needs more than one independent variable. Cannot proceed.")
         }
 
         # If more than 2 columns, throw a warning and select the first 2 columns 

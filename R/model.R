@@ -259,12 +259,12 @@ setMethod(
 
 
 
-#' An S4 Class to Represent the Main Effect Model.
+#' An S4 Class to Represent the main_effect Effect Model.
 #' 
 #' @details
-#' Defines the \code{main} class, which states that for two given input
+#' Defines the \code{main_effect} class, which states that for two given input
 #' variables \eqn{x} and \eqn{z}, the relationship between these variables and 
-#' the dependent variable \eqn{y} is one with only a main effect:
+#' the dependent variable \eqn{y} is one with only a main_effect effect:
 #' 
 #' \deqn{y = a + bx + cz}
 #' 
@@ -277,15 +277,15 @@ setMethod(
 #' @slot sd Numeric defining the error around the deterministic part defined by 
 #' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
-#' @rdname main-class
+#' @rdname main_effect-class
 #'
 #' @export
-main <- setClass(
-    "main",
+main_effect <- setClass(
+    "main_effect",
     contains = c("model")
 )
 
-#' Constructor for the \code{\link[paramrel]{main-class}}
+#' Constructor for the \code{\link[paramrel]{main_effect-class}}
 #' 
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
@@ -296,20 +296,20 @@ main <- setClass(
 #' @export
 setMethod(
     "initialize",
-    "main",
+    "main_effect",
     function(.Object,
              parameters = c(0, 0, 0),
              sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 3) {
-            stop("Too few parameters provided for the main class. Cannot proceed.")
+            stop("Too few parameters provided for the main_effect class. Cannot proceed.")
         }
 
         # Check if there are too many parameters. If so, we throw a warning
         # and only select the first few values
         if(length(parameters) > 3) {
-            warning("Too many parameters provided for the main class. Selecting the first 3.")
+            warning("Too many parameters provided for the main_effect class. Selecting the first 3.")
             parameters <- parameters[1:3]
         }
         
@@ -333,7 +333,7 @@ setMethod(
 #' @details
 #' Defines the \code{interaction} class, which states that for two given input
 #' variables \eqn{x} and \eqn{z}, the relationship between these variables and 
-#' the dependent variable \eqn{y} is one with a main and interaction effect:
+#' the dependent variable \eqn{y} is one with a main_effect and interaction effect:
 #' 
 #' \deqn{y = a + bx + cz + dxz}
 #' 
