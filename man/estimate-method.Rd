@@ -4,7 +4,7 @@
 \alias{estimate}
 \alias{estimate,linear-method}
 \alias{estimate,quadratic-method}
-\alias{estimate,main-method}
+\alias{estimate,main_effect-method}
 \alias{estimate,interaction-method}
 \alias{estimate,ar1-method}
 \alias{estimate,arx-method}
@@ -16,7 +16,7 @@ estimate(model, ...)
 
 \S4method{estimate}{quadratic}(model, data)
 
-\S4method{estimate}{main}(model, data)
+\S4method{estimate}{main_effect}(model, data)
 
 \S4method{estimate}{interaction}(model, data)
 

@@ -4,7 +4,7 @@
 \alias{simulate}
 \alias{simulate,linear-method}
 \alias{simulate,quadratic-method}
-\alias{simulate,main-method}
+\alias{simulate,main_effect-method}
 \alias{simulate,interaction-method}
 \alias{simulate,ar1-method}
 \alias{simulate,arx-method}
@@ -16,7 +16,7 @@ simulate(model, ...)
 
 \S4method{simulate}{quadratic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{main}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+\S4method{simulate}{main_effect}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
 \S4method{simulate}{interaction}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
@@ -32,7 +32,7 @@ quadratic,...)}
 variables. For \code{\link[param-rel]{linear-class}}, 
 \code{\link[param-rel]{quadratic-class}}, \code{\link[param-rel]{arx-class}},
 a numeric vector suffices, as only one independent variable is required. For 
-\code{\link[param-rel]{main-class}} and 
+\code{\link[param-rel]{main_effect-class}} and 
 \code{\link[param-rel]{interaction-class}}, a matrix is needed instead, where 
 the first column is taken to be \eqn{x} (paired with parameter \eqn{b}) and 
 the second column is taken to be \eqn{z} (paired with parameter \eqn{c}). For

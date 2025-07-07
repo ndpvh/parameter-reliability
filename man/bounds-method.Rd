@@ -5,7 +5,7 @@
 \alias{bounds,linear-method}
 \alias{bounds,quadratic-method}
 \alias{bounds,cubic-method}
-\alias{bounds,main-method}
+\alias{bounds,main_effect-method}
 \alias{bounds,interaction-method}
 \alias{bounds,ar1-method}
 \alias{bounds,arx-method}
@@ -19,7 +19,7 @@ bounds(model, ...)
 
 \S4method{bounds}{cubic}(model, intercept = c(-10, 10), slope = c(-5, 5))
 
-\S4method{bounds}{main}(model, intercept = c(-10, 10), slope = c(-5, 5))
+\S4method{bounds}{main_effect}(model, intercept = c(-10, 10), slope = c(-5, 5))
 
 \S4method{bounds}{interaction}(model, intercept = c(-10, 10), slope = c(-5, 5))
 
