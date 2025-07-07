@@ -35,6 +35,8 @@ RoxygenInfo: 7.3.2
 Collate:
     'model.R'
     'simulate.R'
+    'estimate.R'
+    'bounds.R'
     'fitting.R'
     'reliability.R'
     'utils.R'
@@ -51,3 +53,4 @@ Suggests:
     parallel
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+RoxygenNote: 7.3.2
