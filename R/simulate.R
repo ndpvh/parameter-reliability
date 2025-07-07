@@ -17,9 +17,9 @@
 #' \code{\link[param-rel]{interaction-class}}, a matrix is needed instead, where 
 #' the first column is taken to be \eqn{x} (paired with parameter \eqn{b}) and 
 #' the second column is taken to be \eqn{z} (paired with parameter \eqn{c}). For
-#' the \code{\link[param-rel]{autoregressive-class}}, this argument is ignored.
+#' the \code{\link[param-rel]{ar1-class}}, this argument is ignored.
 #' Defaults to \code{NULL}, forcing the user to specify its value for all models
-#' except for the \code{\link[param-rel]{autoregressive-class}}, or alternatively
+#' except for the \code{\link[param-rel]{ar1-class}}, or alternatively
 #' to specify a function with which to generate values of \code{X} through the
 #' \code{Xfun} argument.
 #' @param Xfun Function with which to simulate values for \code{X}. Should take 

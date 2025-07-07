@@ -197,7 +197,7 @@ setMethod(
         # Create a model with the estimated parameters and create the output
         output <- list(
             "fit" = fit, 
-            "model" = autoregressive(
+            "model" = ar1(
                 parameters = as.numeric(fit$coefficients),
                 sd = sd(fit$residuals)
             )

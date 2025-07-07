@@ -398,7 +398,7 @@ setMethod(
 
 
 
-#' An S4 Class to Represent the Autoregressive Model.
+#' An S4 Class to Represent the ar1 Model.
 #' 
 #' @details
 #' Defines the \code{ar1} class, which states that for a given dependent
@@ -424,7 +424,7 @@ ar1 <- setClass(
     contains = c("model")
 )
 
-#' Constructor for the \code{\link[paramrel]{autoregressive-class}}
+#' Constructor for the \code{\link[paramrel]{ar1-class}}
 #' 
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, the 
@@ -442,13 +442,13 @@ setMethod(
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 2) {
-            stop("Too few parameters provided for the autoregressive class. Cannot proceed.")
+            stop("Too few parameters provided for the ar1 class. Cannot proceed.")
         }
 
         # Check if there are too many parameters. If so, we throw a warning
         # and only select the first few values
         if(length(parameters) > 2) {
-            warning("Too many parameters provided for the autoregressive class. Selecting the first 2.")
+            warning("Too many parameters provided for the ar1 class. Selecting the first 2.")
             parameters <- parameters[1:2]
         }
         
