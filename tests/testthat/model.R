@@ -7,7 +7,7 @@ testthat::test_that(
         testthat::expect_error(paramrel::linear(params))
         testthat::expect_error(paramrel::quadratic(params))
         testthat::expect_error(paramrel::cubic(params))
-        testthat::expect_error(paramrel::main(params))
+        testthat::expect_error(paramrel::main_effect(params))
         testthat::expect_error(paramrel::interaction(params))
         testthat::expect_error(paramrel::ar1(params))
         testthat::expect_error(paramrel::arx(params))
@@ -23,7 +23,7 @@ testthat::test_that(
         testthat::expect_warning(paramrel::linear(params))
         testthat::expect_warning(paramrel::quadratic(params))
         testthat::expect_warning(paramrel::cubic(params))
-        testthat::expect_warning(paramrel::main(params))
+        testthat::expect_warning(paramrel::main_effect(params))
         testthat::expect_warning(paramrel::interaction(params))
         testthat::expect_warning(paramrel::ar1(params))
         testthat::expect_warning(paramrel::arx(params))
@@ -40,7 +40,7 @@ testthat::test_that(
         testthat::expect_warning(paramrel::linear(params[1:2], sd = sd))
         testthat::expect_warning(paramrel::quadratic(params[1:3], sd = sd))
         testthat::expect_warning(paramrel::cubic(params[1:4], sd = sd))
-        testthat::expect_warning(paramrel::main(params[1:3], sd = sd))
+        testthat::expect_warning(paramrel::main_effect(params[1:3], sd = sd))
         testthat::expect_warning(paramrel::interaction(params[1:4], sd = sd))
         testthat::expect_warning(paramrel::ar1(params[1:2], sd = sd))
         testthat::expect_warning(paramrel::arx(params[1:3], sd = sd))
@@ -65,7 +65,7 @@ testthat::test_that(
         testthat::expect_equal(tst@parameters, ref)
 
         ref <- rep(1, 3)
-        tst <- paramrel::main(ref)
+        tst <- paramrel::main_effect(ref)
         testthat::expect_equal(tst@parameters, ref)
 
         ref <- rep(1, 4)
@@ -101,7 +101,7 @@ testthat::test_that(
         testthat::expect_equal(tst@parameters, ref)
 
         ref <- params[1:3]
-        tst <- paramrel::main(params) %>%
+        tst <- paramrel::main_effect(params) %>%
             suppressWarnings()
         testthat::expect_equal(tst@parameters, ref)
 
@@ -138,7 +138,7 @@ testthat::test_that(
             suppressWarnings()
         testthat::expect_equal(tst@sd, ref)
 
-        tst <- paramrel::main(params[1:3], sd = sd) %>%
+        tst <- paramrel::main_effect(params[1:3], sd = sd) %>%
             suppressWarnings()
         testthat::expect_equal(tst@sd, ref)
 
