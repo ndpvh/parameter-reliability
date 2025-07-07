@@ -4,23 +4,62 @@
 # FOCUS: Niels' test-retest analysis
 # STATUS: TO BE IMPLEMENTED BY NIELS
 
-#' Generate Parameter Grid for Test-Retest Analysis
-#' Intercepts [-10, 10], Slopes [-5, 5], AR coefficients (-1, 1)
+#' Generate parameter grid
 #' 
-#' @param n_intercepts Number of intercept values to test
-#' @param n_slopes Number of slope values to test  
-#' @param n_ar Number of AR coefficient values to test
-#' @return List of parameter grids for different model types
-generate_testretest_grid <- function(n_intercepts = 5, n_slopes = 5, n_ar = 5) {
+#' Use the bounds of the parameters of a model and create a grid of parameter 
+#' values. Each parameter value is taken at an equal distance across the interval
+#' of the parameter.
+#' 
+#' @param model Object of one of the different model classes (e.g., linear, 
+#' quadratic,...)
+#' @param n_int Integer denoting the number of intercepts to draw. Needs to be 
+#' larger than or equal to 2. Defaults to \code{5}.
+#' @param n_slope Integer denoting the number of slopes to draw. Note that the 
+#' autoregressive parameter is also taken to be a slope. Needs to be 
+#' larger than or equal to 2. Defaults to \code{5}.
+#' @param ... Additional arguments passed on to \code{\link[paramrel]{bounds}}
+#' 
+#' @return Matrix with dimensions N x k, where k is the number of parameters 
+#' of the model and N the total number of combinations possible with these 
+#' parameters
+#' 
+#' @export
+parameter_grid <- function(model,
+                           n_int = 5,
+                           n_slope = 5,
+                           ...) {
   
-  # TODO: Niels to implement
-  # Should create parameter grids for:
-  # - Linear model test-retest
-  # - Quadratic model test-retest  
-  # - Interaction model test-retest
-  # - AR(1) model test-retest
-  
-  stop("Test-retest analysis not yet implemented. This is Niels' part.")
+    # Get the bounds on the parameters of the models
+    bnd <- bounds(model, ...)
+
+    # Get the drawing numbers per parameter type, as well as the number of 
+    # parameters
+    k <- nrow(bnd)
+    n <- c(
+        n_int, 
+        rep(n_slope, k - 1)
+    )
+
+    # Create a matrix of the correct size
+    params <- matrix(
+        0,
+        nrow = prod(n),
+        ncol = k
+    )
+
+    # Loop over all parameters, draw the different values, and put them inside 
+    # the matrix
+    for(i in 1:k) {
+        params[, i] <- rep(
+            rep(
+                seq(bnd[i, 1], bnd[i, 2], length.out = n[i]),
+                times = i
+            ),
+            each = k - i + 1
+        )
+    }
+
+    return(params)  
 }
 
 #' Run Test-Retest Analysis for Single Condition
