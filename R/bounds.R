@@ -25,11 +25,13 @@ setGeneric(
 setMethod(
     "bounds",
     "linear",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -5),
-                c(10, 5)
+                c(intercept[1], slope[1]),
+                c(intercept[2], slope[2])
             )
         )
     }
@@ -43,11 +45,13 @@ setMethod(
 setMethod(
     "bounds",
     "quadratic",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -5, -5),
-                c(10, 5, 5)
+                c(intercept[1], rep(slope[1], 2)),
+                c(intercept[2], rep(slope[2], 2))
             )
         )
     }
@@ -61,11 +65,13 @@ setMethod(
 setMethod(
     "bounds",
     "cubic",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -5, -5, -5),
-                c(10, 5, 5, 5)
+                c(intercept[1], rep(slope[1], 3)),
+                c(intercept[2], rep(slope[2], 3))
             )
         )
     }
@@ -79,11 +85,13 @@ setMethod(
 setMethod(
     "bounds",
     "main",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -5, -5),
-                c(10, 5, 5)
+                c(intercept[1], rep(slope[1], 2)),
+                c(intercept[2], rep(slope[2], 2))
             )
         )
     }
@@ -97,11 +105,13 @@ setMethod(
 setMethod(
     "bounds",
     "interaction",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -5, -5, -5),
-                c(10, 5, 5, 5)
+                c(intercept[1], rep(slope[1], 3)),
+                c(intercept[2], rep(slope[2], 3))
             )
         )
     }
@@ -115,11 +125,13 @@ setMethod(
 setMethod(
     "bounds",
     "ar1",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -0.99),
-                c(10, 0.99)
+                c(intercept[1], -0.99),
+                c(intercept[2], 0.99)
             )
         )
     }
@@ -133,11 +145,13 @@ setMethod(
 setMethod(
     "bounds",
     "arx",
-    function(...) {
+    function(model, 
+             intercept = c(-10, 10),
+             slope = c(-5, 5)) {
         return(
             cbind(
-                c(-10, -0.99, -5),
-                c(10, 0.99, 5)
+                c(intercept[1], -0.99, slope[1]),
+                c(intercept[2], 0.99, slope[2])
             )
         )
     }
