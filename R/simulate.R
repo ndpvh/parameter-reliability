@@ -266,7 +266,7 @@ setMethod(
 #' @rdname simulate-method
 setMethod(
     "simulate",
-    "autoregressive",
+    "ar1",
     function(model,
              X = NULL,
              Xfun = \(x) runif(x, -2, 2),

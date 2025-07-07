@@ -171,7 +171,7 @@ setMethod(
 #' @rdname estimate-method
 setMethod(
     "estimate",
-    "autoregressive",
+    "ar1",
     function(model,
              data) {
 
