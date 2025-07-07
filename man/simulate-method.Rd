@@ -12,17 +12,17 @@
 \usage{
 simulate(model, ...)
 
-\S4method{simulate}{linear}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{linear}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{quadratic}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{quadratic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{main}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{main}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{interaction}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{interaction}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{ar1}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{ar1}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{arx}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{arx}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 }
 \arguments{
 \item{model}{Object of one of the different model classes (e.g., linear, 
