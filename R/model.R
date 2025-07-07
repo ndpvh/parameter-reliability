@@ -229,7 +229,7 @@ setMethod(
     "initialize",
     "cubic",
     function(.Object,
-             parameters = c(0, 0, 0),
+             parameters = c(0, 0, 0, 0),
              sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
