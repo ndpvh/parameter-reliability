@@ -41,7 +41,7 @@ Collate:
     'reliability.R'
     'utils.R'
     'compensatory.R'
-    'testretest.R'
+    'test_retest.R'
     'visualization.R'
     'execution.R'
 Suggests: 
