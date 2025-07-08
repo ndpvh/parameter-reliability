@@ -60,7 +60,11 @@ setMethod(
 
         # Check the values for Xfun. If specified, it will override X
         if(!is.null(Xfun)) {
-            X <- Xfun(N)
+            X <- simulate_x(
+                model,
+                Xfun = Xfun,
+                N = N
+            )
         }
 
         # Check if X is still NULL. If so, then we cannot proceed
@@ -111,7 +115,11 @@ setMethod(
 
         # Check the values for Xfun. If specified, it will override X
         if(!is.null(Xfun)) {
-            X <- Xfun(N)
+            X <- simulate_x(
+                model,
+                Xfun = Xfun,
+                N = N
+            )
         }
 
         # Check if X is still NULL. If so, then we cannot proceed
@@ -162,7 +170,11 @@ setMethod(
 
         # Check the values for Xfun. If specified, it will override X
         if(!is.null(Xfun)) {
-            X <- Xfun(N)
+            X <- simulate_x(
+                model,
+                Xfun = Xfun,
+                N = N
+            )
         }
 
         # Check if X is still NULL. If so, then we cannot proceed
@@ -218,7 +230,11 @@ setMethod(
 
         # Check the values for Xfun. If specified, it will override X
         if(!is.null(Xfun)) {
-            X <- Xfun(N)
+            X <- simulate_x(
+                model,
+                Xfun = Xfun,
+                N = N
+            )
         }
 
         # Check if X is still NULL. If so, then we cannot proceed
@@ -320,7 +336,11 @@ setMethod(
 
         # Check the values for Xfun. If specified, it will override X
         if(!is.null(Xfun)) {
-            X <- Xfun(N)
+            X <- simulate_x(
+                model,
+                Xfun = Xfun,
+                N = N
+            )
         }
 
         # Check if X is still NULL. If so, then we cannot proceed
@@ -376,6 +396,9 @@ setMethod(
 
 
 
+
+################################################################################
+# SIMULATION OF INDEPENDENT VARIABLES
 
 single_x <- function(model, 
                      Xfun = \(x) runif(x, -2, 2),
