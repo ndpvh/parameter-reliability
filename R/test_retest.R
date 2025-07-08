@@ -48,14 +48,21 @@ parameter_grid <- function(model,
     )
 
     # Loop over all parameters, draw the different values, and put them inside 
-    # the matrix
+    # the matrix.
+    #
+    # Logic behind the assignment is the following: When making unique 
+    # combinations of parameters, one can do this deterministically by repeating
+    # the same parameters for a given number of times, either repeating each 
+    # value a number of times or the complete vector. The number of repetitions 
+    # of each type that is needed is a function of the number of unique values 
+    # of each column, which are contained in n
     for(i in 1:k) {
         params[, i] <- rep(
             rep(
                 seq(bnd[i, 1], bnd[i, 2], length.out = n[i]),
-                times = prod(n[-i])^(i - 1)
+                times = ifelse(i == 1, 1, prod(n[1:(i - 1)]))
             ),
-            each = n[i]^(k - i)
+            each = ifelse(i == k, 1, prod(n[(i + 1):k]))
         )
     }
 
