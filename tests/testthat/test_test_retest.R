@@ -163,3 +163,29 @@ testthat::test_that(
         testthat::expect_equal(tst, ref_arx)
     }
 )
+
+testthat::test_that(
+    "Check whether generate_parameters works",
+    {
+        # Use the function with a fixed seed
+        set.seed(1)
+        params <- paramrel::generate_parameters(
+            100000,
+            c(4, -1, 3),
+            1
+        )
+
+        # Do some tests on the structure of the output
+        testthat::expect_equal(nrow(params), 100000)
+        testthat::expect_equal(ncol(params), 3)
+
+        # Do some tests on the content of the output
+        testthat::expect_equal(mean(params[, 1]), 4, tolerance = 1e-2)
+        testthat::expect_equal(mean(params[, 2]), -1, tolerance = 1e-2)
+        testthat::expect_equal(mean(params[, 3]), 3, tolerance = 1e-2)
+
+        testthat::expect_equal(sd(params[, 1]), 1, tolerance = 1e-2)
+        testthat::expect_equal(sd(params[, 2]), 1, tolerance = 1e-2)
+        testthat::expect_equal(sd(params[, 3]), 1, tolerance = 1e-2)
+    }
+)

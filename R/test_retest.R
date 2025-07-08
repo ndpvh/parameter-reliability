@@ -69,6 +69,30 @@ parameter_grid <- function(model,
     return(params)  
 }
 
+#' Generate a Random Parameter Set
+#' 
+#' @param n Integer denoting the number of parameters to generate
+#' @param mean Numeric vector containing the means of the parameters
+#' @param sd Numeric denoting the (shared) standard deviation of the parameters
+#' 
+#' @return Numeric matrix of size n x k, where n is the number of randomly
+#' generated parameter sets and k the number of parameters of the model
+#' 
+#' @export 
+generate_parameters <- function(n, 
+                                mean,
+                                sd) {
+    
+    # Loop over all means and generate multiple new values from a normal 
+    # distribution
+    params <- sapply(
+        mean,
+        \(x) rnorm(n, mean = x, sd = sd)
+    )
+
+    return(params)
+}
+
 #' Run Test-Retest Analysis for Single Condition
 #' 
 #' @param condition_params Parameters for the condition
