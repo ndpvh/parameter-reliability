@@ -367,3 +367,127 @@ setMethod(
         return(output)
     }
 )
+
+
+
+
+
+
+
+
+
+
+single_x <- function(model, 
+                     Xfun = \(x) runif(x, -2, 2),
+                     N = 100) {
+
+    # Check whether multiple functions were provided. If so, then we choose the 
+    # first one and throw a warning
+    if(is.list(Xfun)) {
+        warning("Provided more than one function to generate values of the independent variable where only one is needed. Using the first function.")
+        Xfun <- Xfun[[1]]
+    }
+
+    # Create simulated values with Xfun
+    X <- Xfun(N)
+
+    # If the result is a matrix, we only use the first column
+    if(!is.null(ncol(X))) {
+        warning("Simulated values for the independent variable is a matrix where a vector is expected. Using first column.")
+        X <- X[, 1]
+    }
+
+    # Transform to a matrix and return
+    return(matrix(X, ncol = 1))
+}
+
+double_x <- function(model, 
+                     Xfun = list(
+                        \(x) runif(x, -2, 2),
+                        \(x) runif(x, -2, 2)
+                     ),
+                     N = 100) {
+
+    # Check whether only a single function has been provided. If so, then we 
+    # throw a warning and create a list anyway
+    if(!is.list(Xfun)) {
+        warning("Provided a single function to generate the independent variables where two are needed. Using the same function for both independent variables.")
+        Xfun <- list(Xfun, Xfun)
+    }
+
+    # Check how many functions have been provided and whether this corresponds to
+    # the expectations
+    if(length(Xfun) > 2) {
+        warning("Provided more than two functions to generate values of the independent variable where only two are needed. Using the first two functions.")
+        Xfun <- Xfun[1:2]
+    }
+
+    if(length(Xfun) < 2) {
+        if(length(Xfun) == 1) {
+            warning("Provided a single function to generate the independent variables where two are needed. Using the same function for both independent variables.")
+            Xfun <- list(Xfun[[1]], Xfun[[1]])
+        } else {
+            stop("Provided no function to generate values of the independent variable where two are needed. Cannot proceed.")
+        }
+    }
+
+    # Create simulated values with Xfun
+    X <- sapply(
+        1:2,
+        \(i) Xfun[[i]](N)
+    )
+
+    # If the functions provided matrix output
+    if(nrow(X) > N) {
+        warning("The provided function provides a matrix as output, leading to more than N simulated values for the independent variables. Using only the first N rows.")
+        X <- X[1:N, ]
+    }
+
+    # Transform to a matrix and return
+    return(X)
+}
+
+#' Simulate Values for the Independent Variable for a Model
+#' 
+#' @param model Object of one of the different model classes (e.g., linear, 
+#' quadratic,...)
+#' @param Xfun One or more functions with which to simulate values for the independent 
+#' variable(s). Should take in only a single argument, namely \code{N}, 
+#' specifying how many values for \code{X} to simulate. Defaults to a uniform 
+#' distribution bounded between -2 and 2.
+#' @param N Integer denoting the number of values that should be simulated. 
+#' Defaults to \code{100}.
+#' 
+#' @return Matrix containing the values of the independent variables
+#' 
+#' @examples 
+#' 
+#' @rdname simulate_x-method
+#' 
+#' @export
+setGeneric(
+    "simulate_x",
+    function(model, ...) standardGeneric("simulate_x"),
+    signature = "model"
+)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "linear", single_x)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "quadratic", single_x)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "cubic", single_x)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "main", double_x)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "interaction", double_x)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "ar1", single_x)
+
+#' @rdname simulate_x-method
+setMethod("simulate_x", "arx", single_x)
