@@ -134,7 +134,7 @@ testthat::test_that(
             suppressWarnings()
         testthat::expect_equal(tst@sd, ref)
 
-        tst <- paramrel::cubic(params[1:3], sd = sd) %>%
+        tst <- paramrel::cubic(params[1:4], sd = sd) %>%
             suppressWarnings()
         testthat::expect_equal(tst@sd, ref)
 
