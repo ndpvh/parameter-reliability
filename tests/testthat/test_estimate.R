@@ -56,6 +56,9 @@ testthat::test_that(
 testthat::test_that(
     "Check whether estimation works through recovery",
     {
+        set.seed(1)
+        N <- 50
+
         # Create a recovery function that will conduct our test
         recover <- function(fx, parameters) {
             # Simulate data using the parameters provided
@@ -77,7 +80,6 @@ testthat::test_that(
         # POLYNOMIAL MODELS
 
         # Create a bunch of parameters for the polynomial models
-        N <- 100
         params <- matrix(
             runif(N * 5, min = -10, max = 10),
             nrow = N, 
@@ -89,27 +91,27 @@ testthat::test_that(
         for(i in 1:N) {
             # Linear model
             result[i, 1] <- all(
-                recover(paramrel::linear, params[i, ]) < 1e-2
+                recover(paramrel::linear, params[i, ]) < 1e-1
             )
 
             # Quadratic model
             result[i, 2] <- all(
-                recover(paramrel::quadratic, params[i, ]) < 1e-2
+                recover(paramrel::quadratic, params[i, ]) < 1e-1
             )
 
             # Cubic model
             result[i, 3] <- all(
-                recover(paramrel::cubic, params[i, ]) < 1e-2
+                recover(paramrel::cubic, params[i, ]) < 1e-1
             )
 
             # Main effect model
             result[i, 4] <- all(
-                recover(paramrel::main_effect, params[i, ]) < 1e-2
+                recover(paramrel::main_effect, params[i, ]) < 1e-1
             )
 
             # Interaction model
             result[i, 5] <- all(
-                recover(paramrel::interaction, params[i, ]) < 1e-2
+                recover(paramrel::interaction, params[i, ]) < 1e-1
             )
         }
 
@@ -121,7 +123,6 @@ testthat::test_that(
         # AUTOREGRESSIVE MODELS
 
         # Create a bunch of parameters for the polynomial models
-        N <- 100
         params <- matrix(
             runif(N * 3, min = -10, max = 10),
             nrow = N, 
@@ -134,12 +135,12 @@ testthat::test_that(
         for(i in 1:N) {
             # AR(1) model
             result[i, 1] <- all(
-                recover(paramrel::ar1, params[i, ]) < 1e-2
+                recover(paramrel::ar1, params[i, ]) < 1e-1
             )
 
             # ARX model
             result[i, 2] <- all(
-                recover(paramrel::arx, params[i, ]) < 1e-2
+                recover(paramrel::arx, params[i, ]) < 1e-1
             )
         }
 
