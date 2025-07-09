@@ -4,6 +4,7 @@
 \alias{estimate}
 \alias{estimate,linear-method}
 \alias{estimate,quadratic-method}
+\alias{estimate,cubic-method}
 \alias{estimate,main_effect-method}
 \alias{estimate,interaction-method}
 \alias{estimate,ar1-method}
@@ -15,6 +16,8 @@ estimate(model, ...)
 \S4method{estimate}{linear}(model, data)
 
 \S4method{estimate}{quadratic}(model, data)
+
+\S4method{estimate}{cubic}(model, data)
 
 \S4method{estimate}{main_effect}(model, data)
 

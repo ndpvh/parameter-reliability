@@ -4,6 +4,7 @@
 \alias{simulate}
 \alias{simulate,linear-method}
 \alias{simulate,quadratic-method}
+\alias{simulate,cubic-method}
 \alias{simulate,main_effect-method}
 \alias{simulate,interaction-method}
 \alias{simulate,ar1-method}
@@ -16,9 +17,21 @@ simulate(model, ...)
 
 \S4method{simulate}{quadratic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{main_effect}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+\S4method{simulate}{cubic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
-\S4method{simulate}{interaction}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+\S4method{simulate}{main_effect}(
+  model,
+  X = NULL,
+  Xfun = list(function(x) runif(x, -2, 2), function(x) runif(x, -2, 2)),
+  N = 100
+)
+
+\S4method{simulate}{interaction}(
+  model,
+  X = NULL,
+  Xfun = list(function(x) runif(x, -2, 2), function(x) runif(x, -2, 2)),
+  N = 100
+)
 
 \S4method{simulate}{ar1}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 
