@@ -101,6 +101,41 @@ setMethod(
 #' @rdname estimate-method
 setMethod(
     "estimate",
+    "cubic",
+    function(model,
+             data) {
+
+        # Check if the relevant columns are present in the data
+        if(!all(c("y", "x") %in% colnames(data))) {
+            stop("The relevant columns y and/or x are not present in the data. Cannot proceed.")
+        }
+
+        # Estimate the quadratic model
+        fit <- lm(
+            y ~ x + I(x^2) + I(x^3),
+            data = data
+        )
+
+        # Create a model with the estimated parameters and create the output
+        output <- list(
+            "fit" = fit, 
+            "model" = cubic(
+                parameters = as.numeric(fit$coefficients),
+                sd = sd(fit$residuals)
+            )
+        )
+
+        return(output)
+    }
+)
+
+
+
+
+
+#' @rdname estimate-method
+setMethod(
+    "estimate",
     "main_effect",
     function(model,
              data) {
