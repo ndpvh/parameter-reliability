@@ -127,6 +127,8 @@ generate_parameters <- function(n,
 #' will be used to simulate data.
 #' @param est_model Object of the \code{\link[paramrel]{model-class}} that will 
 #' be fitted to the data simulated by \code{sim_model}
+#' @param n_participants Integer denoting the number of participants to include
+#' in the study
 #' @param n_outcomes Integer denoting the number of outcomes that exists within
 #' each string. Together with \code{n_bins}, the total number of observations per 
 #' participant then becomes \code{N = n_bins * n_outcomes}. Defaults to 
@@ -151,16 +153,18 @@ generate_parameters <- function(n,
 #' @export
 test_retest <- function(sim_model,
                         est_model,
+                        n_participants = 100,
                         n_outcomes = 20,
                         n_bins = 5,
                         parameter_sd = 1,
                         path = file.path("results"),
-                        filename = "results") {
+                        filename = "results",
+                        ...) {
   
     # Generate multiple random parameter sets based on the parameter means and 
     # standard deviations
     params <- generate_parameters(
-        n_datasets,
+        n_participants,
         sim_model@parameters,
         parameter_sd
     )
@@ -178,8 +182,8 @@ test_retest <- function(sim_model,
             # assessment of test-retest
             X <- simulate_x(
                 sim_model,
-                Xfun = Xfun, 
-                N = n_outcomes
+                N = n_outcomes,
+                ...
             )
 
             X <- do.call(
