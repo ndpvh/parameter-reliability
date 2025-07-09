@@ -216,7 +216,7 @@ setMethod(
         }
 
         # Sort the data based on time
-        data <- dplyr::arrange(time)
+        data <- dplyr::arrange(data, time)
 
         # Estimate the linear model
         lagged_data <- data.frame(
@@ -259,7 +259,7 @@ setMethod(
         }
 
         # Sort the data based on time
-        data <- dplyr::arrange(time)
+        data <- dplyr::arrange(data, time)
 
         # Estimate the linear model
         lagged_data <- data.frame(
