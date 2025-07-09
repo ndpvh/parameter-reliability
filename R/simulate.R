@@ -58,8 +58,14 @@ setMethod(
              Xfun = \(x) runif(x, -2, 2),
              N = 100) {
 
-        # Check the values for Xfun. If specified, it will override X
-        if(!is.null(Xfun)) {
+        # Check if X and Xfun are NULL. If so, then we cannot proceed
+        if(is.null(X) & is.null(Xfun)) {
+            stop("X and Xfun are not defined, but linear model needs input. Cannot proceed.")
+        }
+
+        # Check whether X is defined or not. If not, then we have to use Xfun 
+        # to generate values of X
+        if(is.null(X)) {
             X <- simulate_x(
                 model,
                 Xfun = Xfun,
@@ -67,15 +73,15 @@ setMethod(
             )
         }
 
-        # Check if X is still NULL. If so, then we cannot proceed
-        if(is.null(X)) {
-            stop("X and Xfun are not defined, but linear model needs input. Cannot proceed.")
+        # If X is not a matrix, then we need to make it one
+        if(is.null(ncol(X))) {
+            X <- matrix(X, ncol = 1)
         }
 
-        # Check whether X is a numeric vector or a matrix. If a matrix, only 
-        # select the first column and throw a warning
-        if(!is.null(ncol(X))) {
-            warning("Multiple columns found in X, but only 1 needed. Selecting the first one.")
+        # Check whether X has more than one column. If so, this isn't expected and 
+        # we have to select only one
+        if(ncol(X) > 1) {
+            warning("Multiple columns found in X, but only one needed. Selecting the first one.")
             X <- X[, 1]
         }
 
@@ -84,6 +90,7 @@ setMethod(
         sd <- model@sd 
 
         y <- rnorm(
+            nrow(X),
             mean = params[1] + params[2] * X, 
             sd = sd
         )
@@ -92,7 +99,7 @@ setMethod(
         output <- data.frame(
             time = 1:length(y),
             y = y, 
-            x = X, 
+            x = X[, 1], 
             z = numeric(length(y))
         )
 
@@ -113,8 +120,14 @@ setMethod(
              Xfun = \(x) runif(x, -2, 2),
              N = 100) {
 
-        # Check the values for Xfun. If specified, it will override X
-        if(!is.null(Xfun)) {
+        # Check if X and Xfun are NULL. If so, then we cannot proceed
+        if(is.null(X) & is.null(Xfun)) {
+            stop("X and Xfun are not defined, but quadratic model needs input. Cannot proceed.")
+        }
+
+        # Check whether X is defined or not. If not, then we have to use Xfun 
+        # to generate values of X
+        if(is.null(X)) {
             X <- simulate_x(
                 model,
                 Xfun = Xfun,
@@ -122,15 +135,15 @@ setMethod(
             )
         }
 
-        # Check if X is still NULL. If so, then we cannot proceed
-        if(is.null(X)) {
-            stop("X and Xfun are not defined, but quadratic model needs input. Cannot proceed.")
+        # If X is not a matrix, then we need to make it one
+        if(is.null(ncol(X))) {
+            X <- matrix(X, ncol = 1)
         }
 
-        # Check whether X is a numeric vector or a matrix. If a matrix, only 
-        # select the first column and throw a warning
-        if(!is.null(ncol(X))) {
-            warning("Multiple columns found in X, but only 1 needed. Selecting the first one.")
+        # Check whether X has more than one column. If so, this isn't expected and 
+        # we have to select only one
+        if(ncol(X) > 1) {
+            warning("Multiple columns found in X, but only one needed. Selecting the first one.")
             X <- X[, 1]
         }
 
@@ -139,6 +152,7 @@ setMethod(
         sd <- model@sd 
 
         y <- rnorm(
+            nrow(X),
             mean = params[1] + params[2] * X + params[3] * X^2, 
             sd = sd
         )
@@ -147,7 +161,69 @@ setMethod(
         output <- data.frame(
             time = 1:length(y),
             y = y, 
-            x = X, 
+            x = X[, 1], 
+            z = numeric(length(y))
+        )
+
+        return(output)
+    }
+)
+
+
+
+
+
+#' @rdname simulate-method
+setMethod(
+    "simulate",
+    "cubic",
+    function(model,
+             X = NULL,
+             Xfun = \(x) runif(x, -2, 2),
+             N = 100) {
+
+        # Check if X and Xfun are NULL. If so, then we cannot proceed
+        if(is.null(X) & is.null(Xfun)) {
+            stop("X and Xfun are not defined, but cubic model needs input. Cannot proceed.")
+        }
+
+        # Check whether X is defined or not. If not, then we have to use Xfun 
+        # to generate values of X
+        if(is.null(X)) {
+            X <- simulate_x(
+                model,
+                Xfun = Xfun,
+                N = N
+            )
+        }
+
+        # If X is not a matrix, then we need to make it one
+        if(is.null(ncol(X))) {
+            X <- matrix(X, ncol = 1)
+        }
+
+        # Check whether X has more than one column. If so, this isn't expected and 
+        # we have to select only one
+        if(ncol(X) > 1) {
+            warning("Multiple columns found in X, but only one needed. Selecting the first one.")
+            X <- X[, 1]
+        }
+
+        # Simulate values of y
+        params <- model@parameters 
+        sd <- model@sd 
+
+        y <- rnorm(
+            nrow(X),
+            mean = params[1] + params[2] * X + params[3] * X^2 + params[4] * X^3, 
+            sd = sd
+        )
+
+        # Create a data.frame and return as output
+        output <- data.frame(
+            time = 1:length(y),
+            y = y, 
+            x = X[, 1], 
             z = numeric(length(y))
         )
 
@@ -165,11 +241,20 @@ setMethod(
     "main_effect",
     function(model,
              X = NULL,
-             Xfun = \(x) runif(x, -2, 2),
+             Xfun = list(
+                 \(x) runif(x, -2, 2),
+                 \(x) runif(x, -2, 2)
+             ),
              N = 100) {
 
-        # Check the values for Xfun. If specified, it will override X
-        if(!is.null(Xfun)) {
+        # Check if X and Xfun are NULL. If so, then we cannot proceed
+        if(is.null(X) & is.null(Xfun)) {
+            stop("X and Xfun are not defined, but main_effects model needs input. Cannot proceed.")
+        }
+
+        # Check whether X is defined or not. If not, then we have to use Xfun 
+        # to generate values of X
+        if(is.null(X)) {
             X <- simulate_x(
                 model,
                 Xfun = Xfun,
@@ -177,20 +262,15 @@ setMethod(
             )
         }
 
-        # Check if X is still NULL. If so, then we cannot proceed
-        if(is.null(X)) {
-            stop("X and Xfun are not defined, but linear model needs input. Cannot proceed.")
-        }
-
-        # Check whether X is a numeric vector or a matrix. If a vector, cannot
-        # proceed
+        # If X is not a matrix, then we need to make it one
         if(is.null(ncol(X))) {
             stop("X is a numeric vector, but the main_effect effects model needs more than one independent variable. Cannot proceed.")
         }
 
-        # If more than 2 columns, throw a warning and select the first 2 columns 
-        if(!is.null(ncol(X))) {
-            warning("More than 2 columns found in X, but only 2 needed. Selecting the first two.")
+        # Check whether X has more than two columns. If so, this isn't expected and 
+        # we have to select only two
+        if(ncol(X) > 2) {
+            warning("More than two columns found in X where only two are needed. Selecting the first two.")
             X <- X[, 1:2]
         }
 
@@ -199,6 +279,7 @@ setMethod(
         sd <- model@sd 
 
         y <- rnorm(
+            nrow(X),
             mean = params[1] + params[2] * X[, 1] + params[3] * X[, 2], 
             sd = sd
         )
@@ -225,11 +306,20 @@ setMethod(
     "interaction",
     function(model,
              X = NULL,
-             Xfun = \(x) runif(x, -2, 2),
+             Xfun = list(
+                 \(x) runif(x, -2, 2),
+                 \(x) runif(x, -2, 2)
+             ),
              N = 100) {
 
-        # Check the values for Xfun. If specified, it will override X
-        if(!is.null(Xfun)) {
+        # Check if X and Xfun are NULL. If so, then we cannot proceed
+        if(is.null(X) & is.null(Xfun)) {
+            stop("X and Xfun are not defined, but interaction model needs input. Cannot proceed.")
+        }
+
+        # Check whether X is defined or not. If not, then we have to use Xfun 
+        # to generate values of X
+        if(is.null(X)) {
             X <- simulate_x(
                 model,
                 Xfun = Xfun,
@@ -237,20 +327,15 @@ setMethod(
             )
         }
 
-        # Check if X is still NULL. If so, then we cannot proceed
-        if(is.null(X)) {
-            stop("X and Xfun are not defined, but linear model needs input. Cannot proceed.")
-        }
-
-        # Check whether X is a numeric vector or a matrix. If a vector, cannot
-        # proceed
+        # If X is not a matrix, then we need to make it one
         if(is.null(ncol(X))) {
-            stop("X is a numeric vector, but the main_effect effects model needs more than one independent variable. Cannot proceed.")
+            stop("X is a numeric vector, but the interaction model needs more than one independent variable. Cannot proceed.")
         }
 
-        # If more than 2 columns, throw a warning and select the first 2 columns 
-        if(!is.null(ncol(X))) {
-            warning("More than 2 columns found in X, but only 2 needed. Selecting the first two.")
+        # Check whether X has more than two columns. If so, this isn't expected and 
+        # we have to select only two
+        if(ncol(X) > 2) {
+            warning("More than two columns found in X where only two are needed. Selecting the first two.")
             X <- X[, 1:2]
         }
 
@@ -259,6 +344,7 @@ setMethod(
         sd <- model@sd 
 
         y <- rnorm(
+            nrow(X),
             mean = params[1] + params[2] * X[, 1] + params[3] * X[, 2] + params[4] * X[, 1] * X[, 2], 
             sd = sd
         )
@@ -288,6 +374,20 @@ setMethod(
              Xfun = \(x) runif(x, -2, 2),
              N = 100) {
 
+        # If X is defined, we have to change N in favor of X. Otherwise we keep
+        # N
+        if(!is.null(X)) {
+            # Differentiate between vector and matrix
+            if(is.null(ncol(X))) {
+                N <- length(X)
+            } else {
+                N <- nrow(X)
+            }
+
+        } else {
+            X <- numeric(N)
+        }
+
         # Retrieve values of the parameters
         params <- model@parameters 
         sd <- model@sd 
@@ -313,7 +413,7 @@ setMethod(
         output <- data.frame(
             time = 1:length(y),
             y = y, 
-            x = numeric(length(y)), 
+            x = X, 
             z = numeric(length(y))
         )
 
@@ -334,8 +434,14 @@ setMethod(
              Xfun = \(x) runif(x, -2, 2),
              N = 100) {
 
-        # Check the values for Xfun. If specified, it will override X
-        if(!is.null(Xfun)) {
+        # Check if X and Xfun are NULL. If so, then we cannot proceed
+        if(is.null(X) & is.null(Xfun)) {
+            stop("X and Xfun are not defined, but arx model needs input. Cannot proceed.")
+        }
+
+        # Check whether X is defined or not. If not, then we have to use Xfun 
+        # to generate values of X
+        if(is.null(X)) {
             X <- simulate_x(
                 model,
                 Xfun = Xfun,
@@ -343,15 +449,15 @@ setMethod(
             )
         }
 
-        # Check if X is still NULL. If so, then we cannot proceed
-        if(is.null(X)) {
-            stop("X and Xfun are not defined, but linear model needs input. Cannot proceed.")
+        # If X is not a matrix, then we need to make it one
+        if(is.null(ncol(X))) {
+            X <- matrix(X, ncol = 1)
         }
 
-        # Check whether X is a numeric vector or a matrix. If a matrix, only 
-        # select the first column and throw a warning
-        if(!is.null(ncol(X))) {
-            warning("Multiple columns found in X, but only 1 needed. Selecting the first one.")
+        # Check whether X has more than one column. If so, this isn't expected and 
+        # we have to select only one
+        if(ncol(X) > 1) {
+            warning("Multiple columns found in X, but only one needed. Selecting the first one.")
             X <- X[, 1]
         }
 
@@ -363,7 +469,7 @@ setMethod(
         y <- numeric(N)
         y[1] <- rnorm(
             1,
-            mean = (params[1] + params[3] * X[1]) / (1 - params[2]),
+            mean = (params[1] + params[3] * X[1, 1]) / (1 - params[2]),
             sd = sd
         )
 
@@ -371,7 +477,7 @@ setMethod(
         for(i in 2:N) {
             y[i] <- rnorm(
                 1,
-                mean = params[1] + params[2] * y[i - 1] + params[3] * X[i],
+                mean = params[1] + params[2] * y[i - 1] + params[3] * X[i, 1],
                 sd = sd 
             )
         }
@@ -380,7 +486,7 @@ setMethod(
         output <- data.frame(
             time = 1:length(y),
             y = y, 
-            x = numeric(length(y)), 
+            x = X[, 1], 
             z = numeric(length(y))
         )
 
