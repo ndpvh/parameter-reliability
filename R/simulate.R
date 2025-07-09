@@ -610,7 +610,7 @@ setMethod("simulate_x", "quadratic", single_x)
 setMethod("simulate_x", "cubic", single_x)
 
 #' @rdname simulate_x-method
-setMethod("simulate_x", "main", double_x)
+setMethod("simulate_x", "main_effect", double_x)
 
 #' @rdname simulate_x-method
 setMethod("simulate_x", "interaction", double_x)
