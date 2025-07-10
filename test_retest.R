@@ -21,9 +21,12 @@ N <- 10
 
 # Define the study parameters, being the number of participants, bins, and 
 # outcomes per bin
-n_bins <- 2:5
-n_outcomes <- c(15, 25, 50, 100)
-n_participants <- c(25, 100, 500)
+# n_bins <- 2:5
+# n_outcomes <- c(15, 25, 50, 100)
+# n_participants <- c(25, 100, 500)
+n_bins <- c(2, 5)
+n_outcomes <- c(15, 50, 100)
+n_participants <- c(25, 100)
 
 # Define the models you want to test against each other. The comparisons will 
 # always be made in two directions

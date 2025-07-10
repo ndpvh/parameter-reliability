@@ -13,24 +13,26 @@
 \usage{
 simulate(model, ...)
 
-\S4method{simulate}{linear}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+\S4method{simulate}{linear}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
-\S4method{simulate}{quadratic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+\S4method{simulate}{quadratic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
-\S4method{simulate}{cubic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+\S4method{simulate}{cubic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
 \S4method{simulate}{main_effect}(
   model,
   X = NULL,
   Xfun = list(function(x) runif(x, -2, 2), function(x) runif(x, -2, 2)),
-  N = 100
+  N = 100,
+  R2 = NA
 )
 
 \S4method{simulate}{interaction}(
   model,
   X = NULL,
   Xfun = list(function(x) runif(x, -2, 2), function(x) runif(x, -2, 2)),
-  N = 100
+  N = 100,
+  R2 = NA
 )
 
 \S4method{simulate}{ar1}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
@@ -64,6 +66,12 @@ between numeric vector and numeric matrix specified for the \code{X} argument.}
 
 \item{N}{Integer denoting the number of values that should be simulated. 
 Ignored when \code{X} is defined. Defaults to \code{100}.}
+
+\item{R2}{Numeric between 0 and 1 denoting the \eqn{R^2} of the model. If 
+specified, it will compute a residual standard deviation that allows for the 
+determinstic part of the model to have an \eqn{R^2} as specified. Defaults to
+\code{NA}, triggering the use of the model-specified residual standard 
+deviation}
 }
 \value{
 Dataframe containing the values of the variables (\eqn{y}, \eqn{x}, 
