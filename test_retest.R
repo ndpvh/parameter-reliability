@@ -130,7 +130,7 @@ for(i in 1:nrow(conditions)) {
     )
 
     # Loop across all parameters to perform the actual test-retest analysis
-    icc <- parallell::mclapply(
+    icc <- parallel::mclapply(
         1:nrow(grid),
         function(j) {
             # Define the two models of interest
@@ -148,7 +148,7 @@ for(i in 1:nrow(conditions)) {
                 n_outcomes = conditions$n_outcomes[i],
                 n_bins = conditions$n_bins[i],
                 parameter_sd = parameter_sd,
-                icc = 0.8,
+                icc = 1,
                 R2 = 0.75,
                 save_results = FALSE,
                 path = file.path("results", part),
