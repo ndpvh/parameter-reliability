@@ -141,6 +141,7 @@ for(i in 1:nrow(conditions)) {
                 n_outcomes = conditions$n_outcomes[i],
                 n_bins = conditions$n_bins[i],
                 parameter_sd = parameter_sd,
+                icc = 0.8,
                 save_results = FALSE,
                 path = file.path("results", part),
                 filename = paste0(sim, "-", est, "-", j)
