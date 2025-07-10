@@ -328,23 +328,25 @@ test_retest <- function(sim_model,
     )
     names(icc) <- cols  
 
-    # Save all results in the path
-    saveRDS(
-        params,
-        file.path(path, paste0(filename, "_simulates.RDS"))
-    )
-    saveRDS(
-        datasets,
-        file.path(path, paste0(filename, "_data.RDS"))
-    )
-    saveRDS(
-        estimates,
-        file.path(path, paste0(filename, "_estimates.RDS"))
-    )
-    saveRDS(
-        icc,
-        file.path(path, paste0(filename, "_icc.RDS"))
-    )
+    # Save all results in the path if requested
+    if(save_results) {
+        saveRDS(
+            params,
+            file.path(path, paste0(filename, "_simulates.RDS"))
+        )
+        saveRDS(
+            datasets,
+            file.path(path, paste0(filename, "_data.RDS"))
+        )
+        saveRDS(
+            estimates,
+            file.path(path, paste0(filename, "_estimates.RDS"))
+        )
+        saveRDS(
+            icc,
+            file.path(path, paste0(filename, "_icc.RDS"))
+        )
+    }
     
     return(icc)
 }
