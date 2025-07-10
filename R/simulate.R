@@ -30,6 +30,11 @@
 #' between numeric vector and numeric matrix specified for the \code{X} argument.
 #' @param N Integer denoting the number of values that should be simulated. 
 #' Ignored when \code{X} is defined. Defaults to \code{100}.
+#' @param R2 Numeric between 0 and 1 denoting the \eqn{R^2} of the model. If 
+#' specified, it will compute a residual standard deviation that allows for the 
+#' determinstic part of the model to have an \eqn{R^2} as specified. Defaults to
+#' \code{NA}, triggering the use of the model-specified residual standard 
+#' deviation
 #' 
 #' @return Dataframe containing the values of the variables (\eqn{y}, \eqn{x}, 
 #' and if applicable \eqn{z}, named as such) and time (\code{time})
@@ -56,11 +61,23 @@ setMethod(
     function(model,
              X = NULL,
              Xfun = \(x) runif(x, -2, 2),
-             N = 100) {
+             N = 100,
+             R2 = NA) {
 
         # Check if X and Xfun are NULL. If so, then we cannot proceed
         if(is.null(X) & is.null(Xfun)) {
             stop("X and Xfun are not defined, but linear model needs input. Cannot proceed.")
+        }
+
+        # Check the value of the R2, if provided
+        if(!is.na(R2)) {
+            if(R2 < 0) {
+                stop("Provided R^2 is lower than 0. Please provide a value that lies between 0 and 1.")
+            }
+
+            if(R2 > 1) {
+                stop("Provided R^2 is larger than 1. Please provide a value that lies between 0 and 1.")
+            }
         }
 
         # Check whether X is defined or not. If not, then we have to use Xfun 
@@ -85,13 +102,24 @@ setMethod(
             X <- X[, 1]
         }
 
-        # Simulate values of y
+        # Simulate the determinstic part of y    
         params <- model@parameters 
-        sd <- model@sd 
+        deterministic <- params[1] + params[2] * X    
 
+        # Define the standard deviation needed for the simulation. If R2 is not 
+        # provided, this is just the standard deviation defined in the model. 
+        # If R2 is provided, than this standard deviation is computed based on 
+        # the determinstic part of the model
+        if(is.na(R2)) {
+            sd <- model@sd 
+        } else {
+            sd <- sqrt((1 - R2) * var(deterministic) / R2) 
+        }
+
+        # Add the variation to the data
         y <- rnorm(
             nrow(X),
-            mean = params[1] + params[2] * X, 
+            mean = deterministic, 
             sd = sd
         )
 
@@ -118,11 +146,23 @@ setMethod(
     function(model,
              X = NULL,
              Xfun = \(x) runif(x, -2, 2),
-             N = 100) {
+             N = 100,
+             R2 = NA) {
 
         # Check if X and Xfun are NULL. If so, then we cannot proceed
         if(is.null(X) & is.null(Xfun)) {
             stop("X and Xfun are not defined, but quadratic model needs input. Cannot proceed.")
+        }
+
+        # Check the value of the R2, if provided
+        if(!is.na(R2)) {
+            if(R2 < 0) {
+                stop("Provided R^2 is lower than 0. Please provide a value that lies between 0 and 1.")
+            }
+
+            if(R2 > 1) {
+                stop("Provided R^2 is larger than 1. Please provide a value that lies between 0 and 1.")
+            }
         }
 
         # Check whether X is defined or not. If not, then we have to use Xfun 
@@ -147,13 +187,24 @@ setMethod(
             X <- X[, 1]
         }
 
-        # Simulate values of y
+        # Simulate the determinstic part of y    
         params <- model@parameters 
-        sd <- model@sd 
+        deterministic <- params[1] + params[2] * X + params[3] * X^2   
 
+        # Define the standard deviation needed for the simulation. If R2 is not 
+        # provided, this is just the standard deviation defined in the model. 
+        # If R2 is provided, than this standard deviation is computed based on 
+        # the determinstic part of the model
+        if(is.na(R2)) {
+            sd <- model@sd 
+        } else {
+            sd <- sqrt((1 - R2) * var(deterministic) / R2) 
+        }
+
+        # Add the variation to the data
         y <- rnorm(
             nrow(X),
-            mean = params[1] + params[2] * X + params[3] * X^2, 
+            mean = deterministic, 
             sd = sd
         )
 
@@ -180,11 +231,23 @@ setMethod(
     function(model,
              X = NULL,
              Xfun = \(x) runif(x, -2, 2),
-             N = 100) {
+             N = 100,
+             R2 = NA) {
 
         # Check if X and Xfun are NULL. If so, then we cannot proceed
         if(is.null(X) & is.null(Xfun)) {
             stop("X and Xfun are not defined, but cubic model needs input. Cannot proceed.")
+        }
+
+        # Check the value of the R2, if provided
+        if(!is.na(R2)) {
+            if(R2 < 0) {
+                stop("Provided R^2 is lower than 0. Please provide a value that lies between 0 and 1.")
+            }
+
+            if(R2 > 1) {
+                stop("Provided R^2 is larger than 1. Please provide a value that lies between 0 and 1.")
+            }
         }
 
         # Check whether X is defined or not. If not, then we have to use Xfun 
@@ -209,13 +272,24 @@ setMethod(
             X <- X[, 1]
         }
 
-        # Simulate values of y
+        # Simulate the determinstic part of y    
         params <- model@parameters 
-        sd <- model@sd 
+        deterministic <- params[1] + params[2] * X + params[3] * X^2 + params[4] * X^3
 
+        # Define the standard deviation needed for the simulation. If R2 is not 
+        # provided, this is just the standard deviation defined in the model. 
+        # If R2 is provided, than this standard deviation is computed based on 
+        # the determinstic part of the model
+        if(is.na(R2)) {
+            sd <- model@sd 
+        } else {
+            sd <- sqrt((1 - R2) * var(deterministic) / R2) 
+        }
+
+        # Add the variation to the data
         y <- rnorm(
             nrow(X),
-            mean = params[1] + params[2] * X + params[3] * X^2 + params[4] * X^3, 
+            mean = deterministic, 
             sd = sd
         )
 
@@ -245,11 +319,23 @@ setMethod(
                  \(x) runif(x, -2, 2),
                  \(x) runif(x, -2, 2)
              ),
-             N = 100) {
+             N = 100,
+             R2 = NA) {
 
         # Check if X and Xfun are NULL. If so, then we cannot proceed
         if(is.null(X) & is.null(Xfun)) {
             stop("X and Xfun are not defined, but main_effects model needs input. Cannot proceed.")
+        }
+
+        # Check the value of the R2, if provided
+        if(!is.na(R2)) {
+            if(R2 < 0) {
+                stop("Provided R^2 is lower than 0. Please provide a value that lies between 0 and 1.")
+            }
+
+            if(R2 > 1) {
+                stop("Provided R^2 is larger than 1. Please provide a value that lies between 0 and 1.")
+            }
         }
 
         # Check whether X is defined or not. If not, then we have to use Xfun 
@@ -274,13 +360,24 @@ setMethod(
             X <- X[, 1:2]
         }
 
-        # Simulate values of y
+        # Simulate the determinstic part of y    
         params <- model@parameters 
-        sd <- model@sd 
+        deterministic <- params[1] + params[2] * X[, 1] + params[3] * X[, 2]
 
+        # Define the standard deviation needed for the simulation. If R2 is not 
+        # provided, this is just the standard deviation defined in the model. 
+        # If R2 is provided, than this standard deviation is computed based on 
+        # the determinstic part of the model
+        if(is.na(R2)) {
+            sd <- model@sd 
+        } else {
+            sd <- sqrt((1 - R2) * var(deterministic) / R2) 
+        }
+
+        # Add the variation to the data
         y <- rnorm(
             nrow(X),
-            mean = params[1] + params[2] * X[, 1] + params[3] * X[, 2], 
+            mean = deterministic, 
             sd = sd
         )
 
@@ -310,11 +407,23 @@ setMethod(
                  \(x) runif(x, -2, 2),
                  \(x) runif(x, -2, 2)
              ),
-             N = 100) {
+             N = 100,
+             R2 = NA) {
 
         # Check if X and Xfun are NULL. If so, then we cannot proceed
         if(is.null(X) & is.null(Xfun)) {
             stop("X and Xfun are not defined, but interaction model needs input. Cannot proceed.")
+        }
+
+        # Check the value of the R2, if provided
+        if(!is.na(R2)) {
+            if(R2 < 0) {
+                stop("Provided R^2 is lower than 0. Please provide a value that lies between 0 and 1.")
+            }
+
+            if(R2 > 1) {
+                stop("Provided R^2 is larger than 1. Please provide a value that lies between 0 and 1.")
+            }
         }
 
         # Check whether X is defined or not. If not, then we have to use Xfun 
@@ -339,13 +448,24 @@ setMethod(
             X <- X[, 1:2]
         }
 
-        # Simulate values of y
+        # Simulate the determinstic part of y    
         params <- model@parameters 
-        sd <- model@sd 
+        deterministic <- params[1] + params[2] * X[, 1] + params[3] * X[, 2] + params[4] * X[, 1] * X[, 2]
 
+        # Define the standard deviation needed for the simulation. If R2 is not 
+        # provided, this is just the standard deviation defined in the model. 
+        # If R2 is provided, than this standard deviation is computed based on 
+        # the determinstic part of the model
+        if(is.na(R2)) {
+            sd <- model@sd 
+        } else {
+            sd <- sqrt((1 - R2) * var(deterministic) / R2) 
+        }
+
+        # Add the variation to the data
         y <- rnorm(
             nrow(X),
-            mean = params[1] + params[2] * X[, 1] + params[3] * X[, 2] + params[4] * X[, 1] * X[, 2], 
+            mean = deterministic, 
             sd = sd
         )
 
