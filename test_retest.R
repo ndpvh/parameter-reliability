@@ -114,6 +114,7 @@ conditions$icc_max <- 0
 
 # With the different conditions specified, we can start looping over each 
 # condition and doing our analysis
+set.seed(9) # Deadbolts - Thrice
 for(i in 1:nrow(conditions)) {
     # Generate a parameter grid for the simulation model under investigation
     part <- conditions$part[i]
