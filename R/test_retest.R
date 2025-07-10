@@ -141,6 +141,12 @@ generate_parameters <- function(n,
 #' deviation of the parameters, therefore indicating how many individual 
 #' differences that exist on each parameter of the simulating model 
 #' \code{sim_model}. Defaults to \code{1}
+#' @param R2 Numeric between 0 and 1 denoting the \eqn{R^2} of the model on the 
+#' within-person level. If specified, it will compute a residual standard 
+#' deviation that allows for the determinstic part of the model to have an 
+#' \eqn{R^2} as specified. Defaults to \code{NA}, triggering the use of the 
+#' model-specified residual standard deviation. Passed on to 
+#' \code{\link[paramrel]{simulate}}
 #' @param icc Numeric between 0 and 1 denoting the value of the ICC that you 
 #' want to simulate in the data. If specified, it will change the values of each 
 #' of the parameters in the model across bins, emulating variation across bins  
@@ -165,6 +171,7 @@ test_retest <- function(sim_model,
                         n_bins = 5,
                         parameter_sd = 1,
                         icc = 1,
+                        R2 = NA,
                         save_results = TRUE,
                         path = file.path("results"),
                         filename = "results",
@@ -241,7 +248,8 @@ test_retest <- function(sim_model,
                     # Simulate data and add the bin number to it
                     y <- simulate(
                         sim_model,
-                        X = X
+                        X = X,
+                        R2 = R2
                     )
                     y$bin <- j
 
