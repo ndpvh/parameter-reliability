@@ -255,15 +255,15 @@ test_retest <- function(sim_model,
             fit <- summary(result)
     
             systematic <- as.numeric(fit$varcor[1])
-            total <- var(data$param)
+            residual <- as.numeric(fit$sigma^2)
 
             # Compute the ICC(A, 1) for this parameter and return as the result
             # of the procedure
             return(
                 list(
-                    "icc" = systematic / total,
+                    "icc" = systematic / (systematic + residual),
                     "systematic" = systematic, 
-                    "total" = total
+                    "residual" = residual
                 )
             )
         }
