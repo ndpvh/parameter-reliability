@@ -3,12 +3,15 @@ devtools::load_all()
 ################################################################################
 # PRELIMINARIES
 
+# Define the number of cores to use for the analysis
+ncores <- 4
+
 # Define the number of different intercepts and slopes to generate for the 
 # simulation models as well as their natural bounds. Also include a standard 
 # deviation for the residuals of the simulation model and for the individual 
 # differences on the parameters
-n_int <- 3
-n_slope <- 3
+n_int <- 4
+n_slope <- 4
 
 intercept <- c(-10, 10)
 slope <- c(-5, 5)
@@ -126,7 +129,7 @@ for(i in 1:nrow(conditions)) {
     )
 
     # Loop across all parameters to perform the actual test-retest analysis
-    icc <- lapply(
+    icc <- parallell::mclapply(
         1:nrow(grid),
         function(j) {
             # Define the two models of interest
@@ -164,7 +167,8 @@ for(i in 1:nrow(conditions)) {
             rownames(icc) <- NULL
 
             return(icc)
-        }
+        },
+        mc.cores = ncores
     )
 
     # Bind into one big data.frame, add information on the conditions, and save 
