@@ -141,6 +141,11 @@ generate_parameters <- function(n,
 #' deviation of the parameters, therefore indicating how many individual 
 #' differences that exist on each parameter of the simulating model 
 #' \code{sim_model}. Defaults to \code{1}
+#' @param icc Numeric between 0 and 1 denoting the value of the ICC that you 
+#' want to simulate in the data. If specified, it will change the values of each 
+#' of the parameters in the model across bins, emulating variation across bins  
+#' and therefore the consistency with which they can be recovered. Defaults to 
+#' \code{1}, meaning that parameters don't change across bins.
 #' @param save_results Logical denoting whether to save the results. Defaults to
 #' \code{TRUE}
 #' @param path Path to the folder where you want to save the different results.
@@ -159,10 +164,20 @@ test_retest <- function(sim_model,
                         n_outcomes = 20,
                         n_bins = 5,
                         parameter_sd = 1,
+                        icc = 1,
                         save_results = TRUE,
                         path = file.path("results"),
                         filename = "results",
                         ...) {
+
+    # Check whether the ICC is within bounds
+    if(icc < 0) {
+        stop("ICC is lower than 0. Please specify a number between 0 and 1.")
+    }
+
+    if(icc > 1) {
+        stop("ICC is larger than 1. Please specify a number between 0 and 1.")
+    }
   
     # Generate multiple random parameter sets based on the parameter means and 
     # standard deviations
@@ -176,10 +191,6 @@ test_retest <- function(sim_model,
     datasets <- lapply(
         seq_len(nrow(params)),
         function(i) {
-            # Change the simulation model's parameters to the individual-
-            # specific ones here
-            sim_model@parameters <- params[i, ]
-
             # Create the values for the independent variables. Crucially, these 
             # values should be repeated multiple times, allowing for the 
             # assessment of test-retest
@@ -189,19 +200,55 @@ test_retest <- function(sim_model,
                 ...
             )
 
-            X <- do.call(
-                "rbind",
-                lapply(1:n_bins, \(i) X)
-            )
+            # Differentiate different cases based on the ICC that is specified.
+            # Specifically, we differentiate:
+            #   - ICC = 1; In this case, we use the same parameters across all 
+            #              bins, meaning that the participant does not change 
+            #              over time. 
+            #   - ICC = 0; In this case, the participant shows no consistency 
+            #              across bins, meaning we resample their parameters 
+            #              at each time. Note that in reality, the within-person
+            #              standard deviation would have to be infinite for the 
+            #              ICC to be 0. In this simulation, we are bounded to 
+            #              a standard deviation of 100 instead
+            #   - Otherwise: In this case, the participant shows some 
+            #                consistency, meaning their parameters change but
+            #                with a somewhat lower standard deviation than the 
+            #                population standard deviation.
+            #
+            # Luckily, we can use the same procedure for all ICCs, albeit with 
+            # bounds on what the within-person standard deviation can be
 
-            # Simulate the data actual data using the values of X
-            y <- simulate(
-                sim_model,
-                X = X
-            )
+            # Define the within-person standard deviation based on the 
+            # provided ICC. Introduce some bounds on this standard deviation as
+            # well
+            within_sd <- sqrt((1 - icc) * parameter_sd^2 / icc)
+            within_sd <- ifelse(within_sd > 100, 100, within_sd)
 
-            # Add information on the bins in the dataframe
-            y$bin <- rep(1:n_bins, each = n_outcomes)
+            # We have to loop over the bins, resample their parameters, and
+            # generate new data
+            y <- lapply(
+                1:n_bins, 
+                function(j) {
+                    # Adjust the parameters of the model
+                    new_params <- rnorm(
+                        length(params[i, ]), 
+                        mean = params[i, ],
+                        sd = within_sd
+                    )
+                    sim_model@parameters <- new_params
+
+                    # Simulate data and add the bin number to it
+                    y <- simulate(
+                        sim_model,
+                        X = X
+                    )
+                    y$bin <- j
+
+                    return(y)
+                }
+            )
+            y <- do.call("rbind", y)
 
             return(y)
         }
