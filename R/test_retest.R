@@ -141,6 +141,8 @@ generate_parameters <- function(n,
 #' deviation of the parameters, therefore indicating how many individual 
 #' differences that exist on each parameter of the simulating model 
 #' \code{sim_model}. Defaults to \code{1}
+#' @param save_results Logical denoting whether to save the results. Defaults to
+#' \code{TRUE}
 #' @param path Path to the folder where you want to save the different results.
 #' Defaults to a folder \code{"results"} in the current working directory
 #' @param filename Character denoting the delineating name to be given to the 
@@ -157,6 +159,7 @@ test_retest <- function(sim_model,
                         n_outcomes = 20,
                         n_bins = 5,
                         parameter_sd = 1,
+                        save_results = TRUE,
                         path = file.path("results"),
                         filename = "results",
                         ...) {
