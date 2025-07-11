@@ -20,16 +20,16 @@ residual_sd <- 0.5
 parameter_sd <- 1
 
 # Define the number of ICCs to compute for each set of parameters of each model
-N <- 10
+N <- 100
 
 # Define the study parameters, being the number of participants, bins, and 
 # outcomes per bin
-# n_bins <- 2:5
-# n_outcomes <- c(15, 25, 50, 100)
-# n_participants <- c(25, 100, 500)
-n_bins <- c(2, 5)
-n_outcomes <- c(15, 50, 100)
-n_participants <- c(25, 100)
+n_bins <- 2:5
+n_outcomes <- c(15, 25, 50, 100)
+n_participants <- c(25, 100, 500)
+# n_bins <- c(2, 5)
+# n_outcomes <- c(15, 50, 100)
+# n_participants <- c(25, 100)
 
 # Define the models you want to test against each other. The comparisons will 
 # always be made in two directions
@@ -148,8 +148,8 @@ for(i in 1:nrow(conditions)) {
                 n_outcomes = conditions$n_outcomes[i],
                 n_bins = conditions$n_bins[i],
                 parameter_sd = parameter_sd,
-                icc = 1,
-                R2 = 0.75,
+                icc = 0.8,
+                R2 = 0.9,
                 save_results = FALSE,
                 path = file.path("results", part),
                 filename = paste0(sim, "-", est, "-", j)
@@ -433,8 +433,6 @@ for(i in seq_along(parts)) {
 # INTERACTION PLOTS: Taking into account the number of bins, outcomes, and 
 # participants, as well as the specification of the models
 parts <- unique(conditions$part)
-all_colors <- c("cornflowerblue", "salmon", "goldenrod3", "darkolivegreen4", "gray")
-
 for(i in seq_along(parts)) {
     # Define the models that belong to this part
     selection <- conditions[conditions$part == parts[i], ]
