@@ -1,10 +1,6 @@
-# PURPOSE: Define the different model classes that are used in our principle 
-#          analyses. These are the linear, quadratic, main, interaction, 
-#          AR(1), and ARX(1) models
-
-
-
-
+# Purpose: Model class definitions for parameter reliability study
+# Authors: Kenny Yu & Niels Vanhasbroeck
+# Date: July 2025
 
 #' An S4 Class to Represent all Models.
 #' 
@@ -196,12 +192,79 @@ setMethod(
 
 
 
-#' An S4 Class to Represent the Main Effect Model.
+#' An S4 Class to Represent the Cubic Model.
 #' 
 #' @details
-#' Defines the \code{main} class, which states that for two given input
+#' Defines the \code{cubic} class, which states that for a given input \eqn{x}, 
+#' the relationship between \eqn{x} and the dependent variable \eqn{y} is 
+#' quadratic:
+#' 
+#' \deqn{y = a + bx + cx^2 + dx^3}
+#' 
+#' This class is solely defined by its parameters \eqn{a}, \eqn{b}, \eqn{c}, and
+#' \eqn{d}, which should be provided through the construction of this class.
+#'
+#' @slot parameters Numeric vector containing the values of the parameters of 
+#' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
+#' unspecified, the model will default to \code{c(0, 0, 0, 0)}. 
+#' @slot sd Numeric defining the error around the deterministic part defined by 
+#' the slot \code{parameters}. If left unspecified, will default to \code{1}
+#' 
+#' @rdname cubic-class
+#'
+#' @export
+cubic <- setClass(
+    "cubic",
+    contains = c("model")
+)
+
+#' Constructor for the \code{\link[paramrel]{cubic-class}}
+#' 
+#' @param parameters Numeric vector containing the values of the parameters of 
+#' the model, namely \eqn{a}, \eqn{b}, \eqn{c}, and \eqn{d} in this order. If left 
+#' unspecified, the parameters will default to \code{c(0, 0, 0, 0)}.  
+#' 
+#' @export
+setMethod(
+    "initialize",
+    "cubic",
+    function(.Object,
+             parameters = c(0, 0, 0, 0),
+             sd = 1) {
+        
+        # Check if there are too few parameters. If so, we throw an error
+        if(length(parameters) < 4) {
+            stop("Too few parameters provided for the cubic class. Cannot proceed.")
+        }
+
+        # Check if there are too many parameters. If so, we throw a warning
+        # and only select the first few values
+        if(length(parameters) > 4) {
+            warning("Too many parameters provided for the cubic class. Selecting the first 4.")
+            parameters <- parameters[1:4]
+        }
+        
+        # Assigning the parameters
+        .Object <- callNextMethod(
+            .Object, 
+            parameters = parameters, 
+            sd = sd
+        )
+
+        return(.Object)
+    }
+)
+
+
+
+
+
+#' An S4 Class to Represent the main_effect Effect Model.
+#' 
+#' @details
+#' Defines the \code{main_effect} class, which states that for two given input
 #' variables \eqn{x} and \eqn{z}, the relationship between these variables and 
-#' the dependent variable \eqn{y} is one with only a main effect:
+#' the dependent variable \eqn{y} is one with only a main_effect effect:
 #' 
 #' \deqn{y = a + bx + cz}
 #' 
@@ -214,15 +277,15 @@ setMethod(
 #' @slot sd Numeric defining the error around the deterministic part defined by 
 #' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
-#' @rdname main-class
+#' @rdname main_effect-class
 #'
 #' @export
-main <- setClass(
-    "main",
+main_effect <- setClass(
+    "main_effect",
     contains = c("model")
 )
 
-#' Constructor for the \code{\link[paramrel]{main-class}}
+#' Constructor for the \code{\link[paramrel]{main_effect-class}}
 #' 
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
@@ -233,20 +296,20 @@ main <- setClass(
 #' @export
 setMethod(
     "initialize",
-    "main",
+    "main_effect",
     function(.Object,
              parameters = c(0, 0, 0),
              sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 3) {
-            stop("Too few parameters provided for the main class. Cannot proceed.")
+            stop("Too few parameters provided for the main_effect class. Cannot proceed.")
         }
 
         # Check if there are too many parameters. If so, we throw a warning
         # and only select the first few values
         if(length(parameters) > 3) {
-            warning("Too many parameters provided for the main class. Selecting the first 3.")
+            warning("Too many parameters provided for the main_effect class. Selecting the first 3.")
             parameters <- parameters[1:3]
         }
         
@@ -270,7 +333,7 @@ setMethod(
 #' @details
 #' Defines the \code{interaction} class, which states that for two given input
 #' variables \eqn{x} and \eqn{z}, the relationship between these variables and 
-#' the dependent variable \eqn{y} is one with a main and interaction effect:
+#' the dependent variable \eqn{y} is one with a main_effect and interaction effect:
 #' 
 #' \deqn{y = a + bx + cz + dxz}
 #' 
@@ -335,10 +398,10 @@ setMethod(
 
 
 
-#' An S4 Class to Represent the Autoregressive Model.
+#' An S4 Class to Represent the ar1 Model.
 #' 
 #' @details
-#' Defines the \code{autoregressive} class, which states that for a given dependent
+#' Defines the \code{ar1} class, which states that for a given dependent
 #' variable \eqn{y}, the previous values of this variable in part determine 
 #' current values of the variable:
 #' 
@@ -353,15 +416,15 @@ setMethod(
 #' @slot sd Numeric defining the error around the deterministic part defined by 
 #' the slot \code{parameters}. If left unspecified, will default to \code{1}
 #' 
-#' @rdname autoregressive-class
+#' @rdname ar1-class
 #'
 #' @export
-autoregressive <- setClass(
-    "autoregressive",
+ar1 <- setClass(
+    "ar1",
     contains = c("model")
 )
 
-#' Constructor for the \code{\link[paramrel]{autoregressive-class}}
+#' Constructor for the \code{\link[paramrel]{ar1-class}}
 #' 
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, the 
@@ -372,20 +435,20 @@ autoregressive <- setClass(
 #' @export
 setMethod(
     "initialize",
-    "autoregressive",
+    "ar1",
     function(.Object,
              parameters = c(0, 0),
              sd = 1) {
         
         # Check if there are too few parameters. If so, we throw an error
         if(length(parameters) < 2) {
-            stop("Too few parameters provided for the autoregressive class. Cannot proceed.")
+            stop("Too few parameters provided for the ar1 class. Cannot proceed.")
         }
 
         # Check if there are too many parameters. If so, we throw a warning
         # and only select the first few values
         if(length(parameters) > 2) {
-            warning("Too many parameters provided for the autoregressive class. Selecting the first 2.")
+            warning("Too many parameters provided for the ar1 class. Selecting the first 2.")
             parameters <- parameters[1:2]
         }
         

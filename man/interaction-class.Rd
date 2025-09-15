@@ -11,7 +11,7 @@ An S4 Class to Represent the Interaction Model.
 \details{
 Defines the \code{interaction} class, which states that for two given input
 variables \eqn{x} and \eqn{z}, the relationship between these variables and 
-the dependent variable \eqn{y} is one with a main and interaction effect:
+the dependent variable \eqn{y} is one with a main_effect and interaction effect:
 
 \deqn{y = a + bx + cz + dxz}
 

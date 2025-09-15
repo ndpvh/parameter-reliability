@@ -4,25 +4,40 @@
 \alias{simulate}
 \alias{simulate,linear-method}
 \alias{simulate,quadratic-method}
-\alias{simulate,main-method}
+\alias{simulate,cubic-method}
+\alias{simulate,main_effect-method}
 \alias{simulate,interaction-method}
-\alias{simulate,autoregressive-method}
+\alias{simulate,ar1-method}
 \alias{simulate,arx-method}
 \title{Simulate Data from a Model}
 \usage{
 simulate(model, ...)
 
-\S4method{simulate}{linear}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{linear}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
-\S4method{simulate}{quadratic}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{quadratic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
-\S4method{simulate}{main}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{cubic}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
-\S4method{simulate}{interaction}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{main_effect}(
+  model,
+  X = NULL,
+  Xfun = list(function(x) runif(x, -2, 2), function(x) runif(x, -2, 2)),
+  N = 100,
+  R2 = NA
+)
 
-\S4method{simulate}{autoregressive}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{interaction}(
+  model,
+  X = NULL,
+  Xfun = list(function(x) runif(x, -2, 2), function(x) runif(x, -2, 2)),
+  N = 100,
+  R2 = NA
+)
 
-\S4method{simulate}{arx}(model, X = NULL, Xfun = NULL, N = 100)
+\S4method{simulate}{ar1}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
+
+\S4method{simulate}{arx}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100)
 }
 \arguments{
 \item{model}{Object of one of the different model classes (e.g., linear, 
@@ -32,13 +47,13 @@ quadratic,...)}
 variables. For \code{\link[param-rel]{linear-class}}, 
 \code{\link[param-rel]{quadratic-class}}, \code{\link[param-rel]{arx-class}},
 a numeric vector suffices, as only one independent variable is required. For 
-\code{\link[param-rel]{main-class}} and 
+\code{\link[param-rel]{main_effect-class}} and 
 \code{\link[param-rel]{interaction-class}}, a matrix is needed instead, where 
 the first column is taken to be \eqn{x} (paired with parameter \eqn{b}) and 
 the second column is taken to be \eqn{z} (paired with parameter \eqn{c}). For
-the \code{\link[param-rel]{autoregressive-class}}, this argument is ignored.
+the \code{\link[param-rel]{ar1-class}}, this argument is ignored.
 Defaults to \code{NULL}, forcing the user to specify its value for all models
-except for the \code{\link[param-rel]{autoregressive-class}}, or alternatively
+except for the \code{\link[param-rel]{ar1-class}}, or alternatively
 to specify a function with which to generate values of \code{X} through the
 \code{Xfun} argument.}
 
@@ -51,6 +66,12 @@ between numeric vector and numeric matrix specified for the \code{X} argument.}
 
 \item{N}{Integer denoting the number of values that should be simulated. 
 Ignored when \code{X} is defined. Defaults to \code{100}.}
+
+\item{R2}{Numeric between 0 and 1 denoting the \eqn{R^2} of the model. If 
+specified, it will compute a residual standard deviation that allows for the 
+determinstic part of the model to have an \eqn{R^2} as specified. Defaults to
+\code{NA}, triggering the use of the model-specified residual standard 
+deviation}
 }
 \value{
 Dataframe containing the values of the variables (\eqn{y}, \eqn{x}, 

@@ -19,24 +19,38 @@ Authors@R: c(
         comment = c(ORCID = "0000-0002-0665-9354"),
         role = "aut"
     ))
-Description: Contains functions and analysis scripts that try to answer the question of what we can learn from assessing the reliability with which parameters are estimated.
 License: GPL-3
 Encoding: UTF-8
+LazyData: true
 Imports: 
     ggplot2,
     tidyr,
     dplyr,
     methods,
-    latex2exp
-RoxygenNote: 7.3.2
+    latex2exp,
+    magrittr,
+    gridExtra,
+    reshape2
+RoxygenInfo: 7.3.2
 Collate:
     'model.R'
-    'estimate.R'
     'simulate.R'
+    'estimate.R'
+    'bounds.R'
+    'fitting.R'
+    'reliability.R'
+    'utils.R'
+    'compensatory.R'
+    'test_retest.R'
+    'visualization.R'
+    'execution.R'
 Suggests: 
     fs,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    lme4,
+    parallel
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+RoxygenNote: 7.3.2
