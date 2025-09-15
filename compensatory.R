@@ -51,14 +51,14 @@ combinations <- data %>%
     rbind(c("quadratic", "quadratic", "part-2")) 
 
 # GENERAL PLOTS: Aggregating over the number of bins, outcomes, and participants
-parts <- unique(conditions$part)
+parts <- unique(combinations$part)
 cols <- c("variance", "se_ratio", "reliability_coef", "bias", "mse")
 col_titles <- c(
     "variance" = "Variance",
     "se_ratio" = "SE ratio",
     "reliability_coef" = "Reliability coefficient",
     "bias" = "Bias",
-    "mse" = "MSE"
+    "mse" = "SE"
 )
 
 for(i in seq_along(parts)) {
@@ -227,14 +227,14 @@ for(i in seq_along(parts)) {
 
 # INTERACTION PLOTS: Taking into account the number of bins, outcomes, and 
 # participants, as well as the specification of the models
-parts <- unique(conditions$part)
+parts <- unique(combinations$part)
 cols <- c("variance", "se_ratio", "reliability_coef", "bias", "mse")
 col_titles <- c(
     "variance" = "Variance",
     "se_ratio" = "SE ratio",
     "reliability_coef" = "Reliability coefficient",
     "bias" = "Bias",
-    "mse" = "MSE"
+    "mse" = "SE"
 )
 
 for(i in seq_along(parts)) {
