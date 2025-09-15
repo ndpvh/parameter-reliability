@@ -168,18 +168,33 @@ execute_study <- function(sim_model,
             # Estimate the parameters of the model for each bin separately
             result <- lapply(
                 1:n_bins, 
-                \(j) estimate(
-                    est_model, 
-                    datasets[[i]][datasets[[i]]$bin == j, ]
-                )$model@parameters
+                function(j) {
+                    result <- estimate(
+                        est_model, 
+                        datasets[[i]][datasets[[i]]$bin == j, ]
+                    )
+                    
+                    # Combine parameters with standard errors in one numeric and
+                    # return
+                    estimates <- result$model@parameters
+                    standard_error <- summary(result$fit)$coefficients[, 2]
+
+                    return(c(estimates, standard_error))
+                }
             ) 
             result <- do.call("rbind", result)
 
             # Make a data.frame with useful labels and information on the person
             # and bins
+            cols <- c("intercept", paste0("slope_", 2:ncol(result) - 1))
+            cols <- paste0(
+                rep(c("", "se_"), each = length(cols)),
+                rep(cols, times = 2)
+            )
+
             result <- result |>
                 as.data.frame() |>
-                setNames(c("intercept", paste0("slope_", 2:ncol(result) - 1)))
+                setNames()
             result$participant <- i 
             result$bin <- 1:n_bins
 
@@ -188,11 +203,14 @@ execute_study <- function(sim_model,
             full <- estimate(
                 est_model,
                 datasets[[i]]
-            )$model@parameters
+            )
+
+            estimates <- full$model@parameters
+            standard_error <- summary(full$fit)$coefficients[, 2]
 
             result <- rbind(
                 result, 
-                c(full, i, -1) |>
+                c(estimates, standard_error, i, -1) |>
                     matrix(nrow = 1) |>
                     as.data.frame() |>
                     setNames(colnames(result))
