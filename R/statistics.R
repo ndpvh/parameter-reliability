@@ -32,11 +32,11 @@ prepare <- function(estimated,
     # columns to the true parameters indicating that these parameters were set 
     # to 0. If more true parameters than estimated ones, then we do the reverse 
     # operation.
-    if(ncol(estimated) > ncol(simulated)) {
+    if(length(cols) > length(cols_sim)) {
         new_cols <- cols[!(cols %in% cols_sim)]
         simulated[, new_cols] <- 0 
 
-    } else if(ncol(estimated) < ncol(simulated)) {
+    } else if(length(cols) < length(cols_sim)) {
         new_cols <- cols_sim[!(cols_sim %in% cols)]
         new_cols <- paste0(
             rep(c("", "se_"), each = length(new_cols)), 
@@ -86,12 +86,12 @@ descriptives <- function(data) {
             }
 
             results <- lapply(
-                unique(estimates$bin),
+                unique(estimated$bin),
                 function(y) {
                     # Select the data of interest from the data.frame
                     sim <- simulated[, x]
-                    est <- estimates[estimates$bin == y, x]
-                    se <- estimates[estimates$bin == y, paste0("se_", x)]
+                    est <- estimated[estimated$bin == y, x]
+                    se <- estimated[estimated$bin == y, paste0("se_", x)]
 
                     # Compute the descriptives of interest
                     return(
@@ -114,6 +114,7 @@ descriptives <- function(data) {
                 }
             )
             results <- do.call("rbind", results)
+            rownames(results) <- NULL
 
             return(results)            
         }
@@ -152,7 +153,7 @@ icc <- function(data) {
     cols <- data$parameters
 
     # Filter out those occasions where bins are not of import
-    if("bin" %in% colnames(estimated)) {
+    if(!("bin" %in% colnames(estimated))) {
         stop("The column name 'bin' not found in the data.frame. Need repetitions to compute the ICC.")
     }
 
@@ -195,7 +196,33 @@ icc <- function(data) {
     return(icc)
 }
 
-#' Compute the Reliability based on Standard Errors
+#' Compute the Signal-based Metrics on Standard Errors
+#' 
+#' @description 
+#' Computes the coefficient of variation and the signal-to-noise ratio. The 
+#' coefficient of variation is defined as:
+#' 
+#' \deqn{CV = \frac{\sigma}{\mu}}
+#' 
+#' where \eqn{\sigma} is the standard deviation and \eqn{\mu} is the mean of the
+#' estimated parameters. This statistic examines the relationship between the 
+#' observed variation and the average value of the parameters. Note that the 
+#' coefficient of variation is only interpretable if 0 is interpretable on the 
+#' scale. In the case of models, 0 is interpretable on a ratio scale, and so the
+#' coefficient of variation is interpretable as well. However, negative values 
+#' of the parameters are allowed, which is something the coefficient of variation
+#' does not expect, we therefore adjust the formula so that:
+#' 
+#' \deqn{CV = \frac{\sigma}{|\mu|}}
+#' 
+#' communicating the relationship between parameter value and standard deviations
+#' in a directionless way.
+#' 
+#' For random variables, the signal to noise ratio is defined as:
+#' 
+#' \deqn{SNR = \frac{E[S^2]}{E[N^2]}}
+#' 
+#' where \eqn{S} represents the signal and \eqn{N} represents the noise.
 #' 
 #' @param data Named list containing the parameter names under \code{"parameters"},
 #' the true parameter values under \code{"simulated"}, and the estimated 
@@ -206,7 +233,7 @@ icc <- function(data) {
 #' coefficient of variation, and the signal-to-noise ratio
 #' 
 #' @export
-reliability <- function(data) {
+signal <- function(data) {
     # Retrieve the relevant information from the list
     estimated <- data$estimated
     simulated <- data$simulated
@@ -223,23 +250,27 @@ reliability <- function(data) {
         cols,
         function(x) {
             # Select the data of interest from the data.frame
+            sim <- simulated[, x]
             est <- estimates[, x]
             se <- estimates[, paste0("se_", x)]
 
-            # TO DISCUSS WITH KENNY!
-            #
-            # # Compute the coefficient of variation
-            # cv <- ifelse(abs(mean_est) > 1e-10, sd_est / abs(mean_est), NA)
+            # Compute the coefficient of variation
+            cv <- ifelse(
+                abs(mean(est)) > 1e-10, 
+                sd(est) / abs(mean(est)), 
+                NA
+            )
     
-            # # Signal-to-Noise Ratio
-            # true_param <- if(!is.null(true_parameters)) true_parameters[p] else NA
-            # if(!is.na(true_param)) {
-            #   # SNR = true signal strength / estimation noise
-            #   snr <- ifelse(sd_est > 1e-10, abs(true_param) / sd_est, NA)
-            # } else {
-            #   # If no true parameter, use mean estimate magnitude as signal
-            #   snr <- ifelse(sd_est > 1e-10 && abs(mean_est) > 1e-10, abs(mean_est) / sd_est, NA)
-            # }
+            # Compute the signal-to-noise ratio
+            snr <- mean(sim^2) / mean((est - sim)^2)
+
+            return(
+                data.frame(
+                    parameter = x,
+                    coefficient_variation = cv,
+                    signal_to_noise = snr
+                )
+            )
         }
     )
     results <- do.call("rbind", results)
