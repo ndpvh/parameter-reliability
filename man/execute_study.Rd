@@ -16,8 +16,8 @@ execute_study(
   save_results = TRUE,
   path = file.path("results"),
   filename = "results",
-  statistics = list(descriptives = descriptives, reliability = reliability, icc = icc,
-    accuracy = accuracy),
+  statistics = list(descriptives = descriptives, signal = signal, icc = icc, accuracy =
+    accuracy),
   ...
 )
 }
