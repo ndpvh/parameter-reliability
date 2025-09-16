@@ -1,3 +1,8 @@
+# PURPOSE: Define analyses we wish to run on the parameters
+# AUTHORS: Kenny Yu & Niels Vanhasbroeck
+# DATE: Sep 2025
+# FOCUS: Preparation of the estimated and true parameter values and their analysis
+
 #' Prepare True and Estimated Parameters for Analysis
 #' 
 #' @param estimated Dataframe containing estimated parameters per participant and 
