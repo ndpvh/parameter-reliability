@@ -1,33 +1,90 @@
+#' Prepare True and Estimated Parameters for Analysis
+#' 
+#' @param estimated Dataframe containing estimated parameters per participant and 
+#' bin, allowing for a decomposition analysis. 
+#' @param simulated Dataframe containing the simulated values for the parameters
+#' per participant. 
+#' 
+#' @return Named list returning parameter names (\code{"parameters"}) and 
+#' adjusted data.frames for the estimated and true parameter values 
+#' (\code{"estimated"}, \code{"simulated"}) so that they can be readily compared
+#' to each other.
+#' 
+#' @export 
+prepare <- function(estimated, 
+                    simulated) {
+    
+    # Retrieve the parameter names from the estimated parameters
+    cols <- colnames(estimated)
+    cols <- cols[-which(cols %in% c("participant", "bin"))]
+    cols <- cols[!grepl("se_", cols, fixed = TRUE)]
+
+    # Retrieve the parameter names from the true parameters
+    cols_sim <- colnames(simulated) 
+
+    # Handle the true parameters so that you can compare between the two types 
+    # of parameters. If more estimated than simulated parameters, then we add 
+    # columns to the true parameters indicating that these parameters were set 
+    # to 0. If more true parameters than estimated ones, then we do the reverse 
+    # operation.
+    if(ncol(estimated) > ncol(simulated)) {
+        new_cols <- cols[!(cols %in% cols_sim)]
+        simulated[, new_cols] <- 0 
+
+    } else if(ncol(estimated) < ncol(simulated)) {
+        new_cols <- cols_sim[!(cols_sim %in% cols)]
+        new_cols <- paste0(
+            rep(c("", "se_"), each = length(new_cols), 
+            rep(new_cols, times = 2)
+        )
+
+        estimated[, new_cols] <- 0
+    }
+
+    return(
+        list(
+            "parameters" = colnames(simulated),
+            "estimated" = estimated,
+            "simulated" = simulated
+        )
+    )
+}
+
 #' Compute the Descriptive Statistics for the Parameters
 #' 
 #' @description 
 #' Descriptive statistics include the mean, standard deviation, median, and 95%
 #' confidence interval across participants. Statistics are computed per bin-type.
 #' 
-#' @param estimated Dataframe containing estimated parameters per participant and 
-#' bin, allowing for a decomposition analysis. 
-#' @param ... Obsolete. Ensures compatibility with 
-#' \code{\link[paramrel]{execute_study}}
+#' @param data Named list containing the parameter names under \code{"parameters"},
+#' the true parameter values under \code{"simulated"}, and the estimated 
+#' parameter values under \code{"estimated"}. Typically the result of 
+#' \code{\link[paramrel]{prepare}}
 #' 
 #' @return Dataframe containing the parameter and bin (\code{"parameter"}, 
 #' \code{"bin"}), as well as the summary statistics for each.
 #' 
 #' @export
-descriptives <- function(estimated, ...) {
-    # Retrieve the parameter names
-    cols <- colnames(estimated)
-    cols <- cols[-which(cols %in% c("participant", "bin"))]
-    cols <- cols[!grepl("se_", cols, fixed = TRUE)]
+descriptives <- function(data) {
+    # Retrieve the relevant information from the list
+    estimated <- data$estimated
+    simulated <- data$simulated
+    cols <- data$parameters
 
     # Loop over all the parameters and compute the reliability coefficients we 
     # are interested in here
     results <- lapply(
         cols,
         function(x) {
+            if(!("bin" %in% colnames(estimated))) {
+                estimated$bin <- 1
+            }
+
             results <- lapply(
                 unique(estimates$bin),
                 function(y) {
                     # Select the data of interest from the data.frame
+                    sim <- simulated[, x]
                     est <- estimates[estimates$bin == y, x]
                     se <- estimates[estimates$bin == y, paste0("se_", x)]
 
@@ -36,6 +93,7 @@ descriptives <- function(estimated, ...) {
                         data.frame(
                             parameter = x,
                             bin = y,
+                            true_value = mean(sim),
                             mean = mean(est),
                             sd = sd(est),
                             q025 = quantile(est, prob = 0.025),
@@ -72,24 +130,26 @@ descriptives <- function(estimated, ...) {
 #' parameters -- against the total observed variance in the parameters, checking 
 #' whether individual differences can be reliably picked up on.
 #' 
-#' @param estimated Dataframe containing estimated parameters per participant and 
-#' bin, allowing for a decomposition analysis. 
-#' @param ... Obsolete. Ensures compatibility with 
-#' \code{\link[paramrel]{execute_study}}
+#' @param data Named list containing the parameter names under \code{"parameters"},
+#' the true parameter values under \code{"simulated"}, and the estimated 
+#' parameter values under \code{"estimated"}. Typically the result of 
+#' \code{\link[paramrel]{prepare}}
 #' 
 #' @return Dataframe containing the parameter (\code{"parameter"}), systematic 
 #' and unsystematic variances (\code{"systematic"}, \code{"unsystematic"}), and 
 #' the estimated \eqn{ICC(A, 1)} for each parameter (\code{"icc"}) 
 #' 
 #' @export
-icc <- function(estimated, ...) {
-    # Filter out those occasions where bins are not of import
-    estimated <- estimated[estimated$bin != -1, ]
+icc <- function(data) {
+    # Retrieve the relevant information from the list
+    estimated <- data$estimated
+    simulated <- data$simulated
+    cols <- data$parameters
 
-    # Get the column names of the data and identify all parameter names
-    cols <- colnames(estimated)
-    cols <- cols[-which(cols %in% c("participant", "bin"))]
-    cols <- cols[!grepl("se_", cols, fixed = TRUE)]
+    # Filter out those occasions where bins are not of import
+    if("bin" %in% colnames(estimated)) {
+        stop("The column name 'bin' not found in the data.frame. Need repetitions to compute the ICC.")
+    }
 
     # Loop over all columns and compute the ICC per parameter
     icc <- lapply(
@@ -132,38 +192,24 @@ icc <- function(estimated, ...) {
 
 #' Compute the Reliability based on Standard Errors
 #' 
-#' @param estimated Dataframe containing estimated parameters per participant and 
-#' bin, allowing for a decomposition analysis. 
-#' @param ... Obsolete. Ensures compatibility with 
-#' \code{\link[paramrel]{execute_study}}
+#' @param data Named list containing the parameter names under \code{"parameters"},
+#' the true parameter values under \code{"simulated"}, and the estimated 
+#' parameter values under \code{"estimated"}. Typically the result of 
+#' \code{\link[paramrel]{prepare}}
 #' 
-#' @return Dataframe containing the parameter (\code{"parameter"}), systematic 
-#' and unsystematic variances (\code{"systematic"}, \code{"unsystematic"}), and 
-#' the estimated \eqn{ICC(A, 1)} for each parameter (\code{"icc"})
+#' @return Dataframe containing the parameter (\code{"parameter"}), the 
+#' coefficient of variation, and the signal-to-noise ratio
 #' 
 #' @export
-reliability <- function(estimated, ...) {
+reliability <- function(data) {
+    # Retrieve the relevant information from the list
+    estimated <- data$estimated
+    simulated <- data$simulated
+    cols <- data$parameters
+
     # Filter out the bin-specific estimates. Not needed for this analysis
-    estimated <- estimated[estimated$bin == -1, ]
-
-    # Check whether you have enough data to compute the reliability coefficient
-    if(nrow(estimated) < 3) {
-        stop("At least 3 simulations per parameter set are needed to estimate the reliability coefficient.")
-    }
-
-    # Retrieve the parameter names
-    cols <- colnames(estimated)
-    cols <- cols[-which(cols %in% c("participant", "bin"))]
-    cols <- cols[!grepl("se_", cols, fixed = TRUE)]
-
-    # Handle true parameters
-    if(!is.null(true_parameters)) {
-      if(length(true_parameters) < n_params) {
-        true_parameters <- c(true_parameters, rep(NA, n_params - length(true_parameters)))
-      } else if(length(true_parameters) > n_params) {
-        true_parameters <- true_parameters[1:n_params]
-      }
-      names(true_parameters) <- parameter_names
+    if("bin" %in% colnames(estimated)) {
+        estimated <- estimated[estimated$bin == -1, ]
     }
 
     # Loop over all the parameters and compute the reliability coefficients we 
@@ -174,130 +220,113 @@ reliability <- function(estimated, ...) {
             # Select the data of interest from the data.frame
             est <- estimates[, x]
             se <- estimates[, paste0("se_", x)]
+
+            # TO DISCUSS WITH KENNY!
+            #
+            # # Compute the coefficient of variation
+            # cv <- ifelse(abs(mean_est) > 1e-10, sd_est / abs(mean_est), NA)
+    
+            # # Signal-to-Noise Ratio
+            # true_param <- if(!is.null(true_parameters)) true_parameters[p] else NA
+            # if(!is.na(true_param)) {
+            #   # SNR = true signal strength / estimation noise
+            #   snr <- ifelse(sd_est > 1e-10, abs(true_param) / sd_est, NA)
+            # } else {
+            #   # If no true parameter, use mean estimate magnitude as signal
+            #   snr <- ifelse(sd_est > 1e-10 && abs(mean_est) > 1e-10, abs(mean_est) / sd_est, NA)
+            # }
         }
     )
+    results <- do.call("rbind", results)
 
-
-
+    return(results)
 }
 
-calculate_reliability <- function(coef_matrix, se_matrix, true_parameters = NULL, 
-                                  alpha = 0.05, parameter_names = NULL) {
-  
-  
-  
-  
-  
-  
-  
-  reliability_metrics <- list()
-  
-  for(p in 1:n_params) {
-    param_name <- parameter_names[p]
-    coefs <- coef_matrix[, p]
-    ses <- se_matrix[, p]
-    
-    
-    
-    # Coefficient of Variation
-    cv <- ifelse(abs(mean_est) > 1e-10, sd_est / abs(mean_est), NA)
-    
-    # Signal-to-Noise Ratio
-    true_param <- if(!is.null(true_parameters)) true_parameters[p] else NA
-    if(!is.na(true_param)) {
-      # SNR = true signal strength / estimation noise
-      snr <- ifelse(sd_est > 1e-10, abs(true_param) / sd_est, NA)
-    } else {
-      # If no true parameter, use mean estimate magnitude as signal
-      snr <- ifelse(sd_est > 1e-10 && abs(mean_est) > 1e-10, abs(mean_est) / sd_est, NA)
+#' Compute the Bias and MSE of the Estimates
+#' 
+#' @description 
+#' This function depends on the assumption that the order of the estimated 
+#' parameters is the same as for the generating parameters. This is automatically
+#' true in the \code{\link[paramrel]{execute_study}} function.
+#' 
+#' @param data Named list containing the parameter names under \code{"parameters"},
+#' the true parameter values under \code{"simulated"}, and the estimated 
+#' parameter values under \code{"estimated"}. Typically the result of 
+#' \code{\link[paramrel]{prepare}}
+#' 
+#' @return Dataframe containing the parameter (\code{"parameter"}), the 
+#' bias, and the MSE
+#' 
+#' @export
+accuracy <- function(data) {
+    # Retrieve the relevant information from the list
+    estimated <- data$estimated
+    simulated <- data$simulated
+    cols <- data$parameters
+
+    # Filter out the bin-specific estimates. Not needed for this analysis
+    if("bin" %in% colnames(estimated)) {
+        estimated <- estimated[estimated$bin == -1, ]
     }
-    
-    # Test-Retest Reliability (split-half correlation)
-    test_retest <- NA
-    if(n_valid >= 10) {
-      half_size <- floor(n_valid / 2)
-      if(half_size >= 3) {
-        half1 <- coefs_clean[1:half_size]
-        half2 <- coefs_clean[(half_size + 1):(2 * half_size)]
-        
-        test_retest <- tryCatch({
-          if(sd(half1) > 1e-10 && sd(half2) > 1e-10) {
-            cor(half1, half2, use = "complete.obs")
-          } else {
-            NA
-          }
-        }, error = function(e) NA)
-      }
-    }
-    
-    # Intraclass Correlation Coefficient
-    icc <- NA
-    if(n_valid >= 10) {
-      half_size <- floor(n_valid / 2)
-      if(half_size >= 3) {
-        half1 <- coefs_clean[1:half_size]
-        half2 <- coefs_clean[(half_size + 1):(2 * half_size)]
-        
-        tryCatch({
-          grand_mean <- mean(c(half1, half2))
-          between_var <- var(c(mean(half1), mean(half2))) * half_size
-          within_var <- (var(half1) + var(half2)) / 2
-          
-          if(is.finite(between_var) && is.finite(within_var) && 
-             (between_var + within_var) > 1e-10) {
-            icc <- between_var / (between_var + within_var)
-          }
-        }, error = function(e) {
-          icc <- NA
-        })
-      }
-    }
-    
-    # Bias and Accuracy Metrics
-    bias <- NA
-    relative_bias <- NA
-    mse <- NA
-    coverage <- NA
-    
-    if(!is.na(true_param)) {
-      # Bias
-      bias <- mean_est - true_param
-      relative_bias <- ifelse(abs(true_param) > 1e-10, bias / true_param, NA)
-      
-      # Mean Squared Error
-      mse <- mean((coefs_clean - true_param)^2)
-      
-      # Coverage Probability
-      z_critical <- qnorm(1 - alpha / 2)
-      ci_lower <- coefs_clean - z_critical * ses_clean
-      ci_upper <- coefs_clean + z_critical * ses_clean
-      coverage <- mean(ci_lower <= true_param & ci_upper >= true_param)
-    }
-    
-    # Store all metrics
-    reliability_metrics[[param_name]] <- list(
-      # Basic descriptives
-      mean_estimate = mean_est,
-      sd_estimate = sd_est,
-      mean_se = mean_se,
-      n_valid = n_valid,
-      
-      # Core reliability metrics
-      cv = cv,
-      snr = snr,
-      test_retest = test_retest,
-      icc = icc,
-      
-      # Bias and accuracy metrics
-      bias = bias,
-      relative_bias = relative_bias,
-      mse = mse,
-      coverage = coverage
+
+    # Loop over all the parameters and compute the reliability coefficients we 
+    # are interested in here
+    results <- lapply(
+        cols,
+        function(x) {
+            # Select the data of interest from the data.frame
+            sim <- simulated[, x]
+            est <- estimates[, x]
+            se <- estimates[, paste0("se_", x)]
+
+            # Compute the average directed and undirected bias
+            bias_directed <- mean(est - sim)
+            bias_undirected <- abs(bias_directed)
+
+            # Compute the relative bias, which is defined as the bias divided by
+            # the sum of all true values. Create a directed and undirected 
+            # variante
+            bias_relative <- sum(est - sim) / sum(sim)
+            bias_relative_undirected <- abs(bias_relative)
+
+            # Compute the MSE
+            mse <- mean((est - sim)^2)
+            
+            # Compute coverage of the true parameter based on the analytic 
+            # formula for the 95%CI
+            z <- qnorm(c(0.025, 0.975))
+            ci <- est + z * se
+            
+            coverage <- mean(ci[1] >= sim & ci[2] <= sim)
+
+            # Add all of these in a data.frame and return
+            return(
+                data.frame(
+                    parameter = x,
+                    true_value = mean(sim),
+                    estimated_value = mean(est),
+                    standard_error = mean(se),
+                    bias_directed = bias_directed,
+                    bias_undirected = bias_undirected,
+                    bias_relative = bias_relative,
+                    bias_relative_undirected = bias_relative_undirected,
+                    mse = mse, 
+                    ci_lower = mean(ci[1]),
+                    ci_upper = mean(ci[2]),
+                    coverage = coverage
+                )
+            )
+        }
     )
-  }
-  
-  return(reliability_metrics)
+    results <- do.call("rbind", results)
+
+    return(results)
 }
+
+
+
+
+
 
 calculate_diagnostic_performance <- function(reliability_comparison, 
                                              thresholds = list(bias = 0.1, snr = 0.2, mse = 2.0, coverage = 0.2)) {
