@@ -297,7 +297,7 @@ accuracy <- function(data) {
             z <- qnorm(c(0.025, 0.975))
             ci <- est + z * se
             
-            coverage <- mean(ci[1] >= sim & ci[2] <= sim)
+            coverage <- mean(sim >= ci[1] & sim <= ci[2])
 
             # Add all of these in a data.frame and return
             return(
