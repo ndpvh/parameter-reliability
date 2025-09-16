@@ -1,125 +1,17 @@
 # PURPOSE: Test-retest reliability analysis for parameter reliability study
 # AUTHORS: Kenny Yu & Niels Vanhasbroeck
-# DATE: July 2025
-# FOCUS: Niels' test-retest analysis
-# STATUS: TO BE IMPLEMENTED BY NIELS
+# DATE: Sep 2025
+# FOCUS: Providing a function to set up and execute our simulation study
 
-#' Generate parameter grid
-#' 
-#' Use the bounds of the parameters of a model and create a grid of parameter 
-#' values. Each parameter value is taken at an equal distance across the interval
-#' of the parameter.
-#' 
-#' @param model Object of one of the different model classes (e.g., linear, 
-#' quadratic,...)
-#' @param n_int Integer denoting the number of intercepts to draw. Needs to be 
-#' larger than or equal to 2. Defaults to \code{5}.
-#' @param n_slope Integer denoting the number of slopes to draw. Note that the 
-#' autoregressive parameter is also taken to be a slope. Needs to be 
-#' larger than or equal to 2. Defaults to \code{5}.
-#' @param ... Additional arguments passed on to \code{\link[paramrel]{bounds}}
-#' 
-#' @return Matrix with dimensions N x k, where k is the number of parameters 
-#' of the model and N the total number of combinations possible with these 
-#' parameters
-#' 
-#' @export
-parameter_grid <- function(model,
-                           n_int = 5,
-                           n_slope = 5,
-                           ...) {
-  
-    # Get the bounds on the parameters of the models
-    bnd <- bounds(model, ...)
-
-    # Get the drawing numbers per parameter type, as well as the number of 
-    # parameters
-    k <- nrow(bnd)
-    n <- c(
-        n_int, 
-        rep(n_slope, k - 1)
-    )
-
-    # Create a matrix of the correct size
-    params <- matrix(
-        0,
-        nrow = prod(n),
-        ncol = k
-    )
-
-    # Loop over all parameters, draw the different values, and put them inside 
-    # the matrix.
-    #
-    # Logic behind the assignment is the following: When making unique 
-    # combinations of parameters, one can do this deterministically by repeating
-    # the same parameters for a given number of times, either repeating each 
-    # value a number of times or the complete vector. The number of repetitions 
-    # of each type that is needed is a function of the number of unique values 
-    # of each column, which are contained in n
-    for(i in 1:k) {
-        params[, i] <- rep(
-            rep(
-                seq(bnd[i, 1], bnd[i, 2], length.out = n[i]),
-                times = ifelse(i == 1, 1, prod(n[1:(i - 1)]))
-            ),
-            each = ifelse(i == k, 1, prod(n[(i + 1):k]))
-        )
-    }
-
-    return(params)  
-}
-
-#' Generate a Random Parameter Set
-#' 
-#' @param n Integer denoting the number of parameters to generate
-#' @param mean Numeric vector containing the means of the parameters
-#' @param sd Numeric denoting the (shared) standard deviation of the parameters
-#' 
-#' @return Numeric matrix of size n x k, where n is the number of randomly
-#' generated parameter sets and k the number of parameters of the model
-#' 
-#' @export 
-generate_parameters <- function(n, 
-                                mean,
-                                sd) {
-    
-    # Loop over all means and generate multiple new values from a normal 
-    # distribution
-    params <- sapply(
-        mean,
-        \(x) rnorm(n, mean = x, sd = sd)
-    )
-
-    return(params)
-}
-
-#' Run Test-Retest Analysis
+#' Set-up Study
 #' 
 #' Given a particular simulation model, estimate a same or other statistical 
-#' model and compute the consistency of the estimated parameters. For this, we 
-#' use the \eqn{ICC(A, 1)}, testing the agreement of the exact values of the 
-#' parameters within participants.
-#' 
-#' @details 
-#' This function assesses the test-retest consistency of a set of estimated 
-#' parameters in a particular setting. Specifically, we assume that a same 
-#' participant has a same set of parameters that underlie their responses. With
-#' this assumption in place, we then simulate a dataset where a participant 
+#' model and compute the summary statistics of interest. In our simulation, we 
+#' assume that a same participant has a same set of parameters that underlie 
+#' their responses throughout the full study. During the study, the participant 
 #' encounters the same string of values for the independent variable(s) 
-#' multiple times throughout the study. By estimating a statistical model for 
-#' each participant and each repeated string of outcomes separately, we can 
-#' then assess the test-retest consistency of these estimated parameters, which
-#' is the goal of this study
-#' 
-#' As the operationalization of consistency, we compute the \eqn{ICC(A, 1)} of 
-#' the parameters across participants, in our context being defined as:
-#' 
-#' \deqn{ICC(A, 1) = \frac{\sigma_\text{participants}}^2}{\sigma_\text{total}^2}
-#' 
-#' where \eqn{\sigma^2} denotes the variance. This \eqn{ICC} puts the systematic 
-#' variance -- that is, the interindividual differences in the values of the 
-#' parameters -- against the total observed variance in the parameters, checking 
-#' whether individual differences can be reliably picked up on.
+#' multiple times throughout the study, allowing for the assessment of test-retest
+#' reliability.
 #' 
 #' @param sim_model Object of the \code{\link[paramrel]{model-class}} containing
 #' parameters around which participant-specific parameters will be generated 
@@ -147,42 +39,51 @@ generate_parameters <- function(n,
 #' \eqn{R^2} as specified. Defaults to \code{NA}, triggering the use of the 
 #' model-specified residual standard deviation. Passed on to 
 #' \code{\link[paramrel]{simulate}}
-#' @param icc Numeric between 0 and 1 denoting the value of the ICC that you 
+#' @param ICC Numeric between 0 and 1 denoting the value of the ICC that you 
 #' want to simulate in the data. If specified, it will change the values of each 
 #' of the parameters in the model across bins, emulating variation across bins  
 #' and therefore the consistency with which they can be recovered. Defaults to 
 #' \code{1}, meaning that parameters don't change across bins.
 #' @param save_results Logical denoting whether to save the results. Defaults to
-#' \code{TRUE}
+#' \code{FALSE}
 #' @param path Path to the folder where you want to save the different results.
 #' Defaults to a folder \code{"results"} in the current working directory
 #' @param filename Character denoting the delineating name to be given to the 
 #' files that contain the different results. Defaults to \code{"results"}
+#' @param statistics Named list containing single-argument functions that take 
+#' in the estimated and generating values of the parameters and perform analyses 
+#' on these values. Defaults to all functions defined in _statistics.R_.
 #' @param ... Additional arguments passed on to 
 #' \code{\link[paramrel]{simulate_x}} 
 #' 
 #' @return Test-retest reliability results
 #' 
 #' @export
-test_retest <- function(sim_model,
-                        est_model,
-                        n_participants = 100,
-                        n_outcomes = 20,
-                        n_bins = 5,
-                        parameter_sd = 1,
-                        icc = 1,
-                        R2 = NA,
-                        save_results = TRUE,
-                        path = file.path("results"),
-                        filename = "results",
-                        ...) {
+execute_study <- function(sim_model,
+                          est_model,
+                          n_participants = 100,
+                          n_outcomes = 20,
+                          n_bins = 5,
+                          parameter_sd = 1,
+                          ICC = 1,
+                          R2 = NA,
+                          save_results = FALSE,
+                          path = file.path("results"),
+                          filename = "results",
+                          statistics = list(
+                              "descriptives" = descriptives,
+                              "signal" = signal,
+                              "icc" = icc,
+                              "accuracy" = accuracy
+                          ),
+                          ...) {
 
     # Check whether the ICC is within bounds
-    if(icc < 0) {
+    if(ICC < 0) {
         stop("ICC is lower than 0. Please specify a number between 0 and 1.")
     }
 
-    if(icc > 1) {
+    if(ICC > 1) {
         stop("ICC is larger than 1. Please specify a number between 0 and 1.")
     }
   
@@ -229,7 +130,7 @@ test_retest <- function(sim_model,
             # Define the within-person standard deviation based on the 
             # provided ICC. Introduce some bounds on this standard deviation as
             # well
-            within_sd <- sqrt((1 - icc) * parameter_sd^2 / icc)
+            within_sd <- sqrt((1 - ICC) * parameter_sd^2 / ICC)
             within_sd <- ifelse(within_sd > 100, 100, within_sd)
 
             # We have to loop over the bins, resample their parameters, and
@@ -269,64 +170,75 @@ test_retest <- function(sim_model,
             # Estimate the parameters of the model for each bin separately
             result <- lapply(
                 1:n_bins, 
-                \(j) estimate(
-                    est_model, 
-                    datasets[[i]][datasets[[i]]$bin == j, ]
-                )$model@parameters
+                function(j) {
+                    result <- estimate(
+                        est_model, 
+                        datasets[[i]][datasets[[i]]$bin == j, ]
+                    )
+                    
+                    # Combine parameters with standard errors in one numeric and
+                    # return
+                    estimates <- result$model@parameters
+                    standard_error <- summary(result$fit)$coefficients[, 2]
+
+                    return(c(estimates, standard_error))
+                }
             ) 
             result <- do.call("rbind", result)
 
             # Make a data.frame with useful labels and information on the person
             # and bins
+            cols <- c("intercept", paste0("slope_", 2:(ncol(result)/2) - 1))
+            cols <- paste0(
+                rep(c("", "se_"), each = length(cols)),
+                rep(cols, times = 2)
+            )
+
             result <- result |>
                 as.data.frame() |>
-                setNames(c("intercept", paste0("slope_", 2:ncol(result) - 1)))
+                setNames(cols)
             result$participant <- i 
             result$bin <- 1:n_bins
 
+            # Also estimate the model on the full dataset, without accounting 
+            # for the bins
+            full <- estimate(
+                est_model,
+                datasets[[i]]
+            )
+
+            estimates <- full$model@parameters
+            standard_error <- summary(full$fit)$coefficients[, 2]
+
+            result <- rbind(
+                result, 
+                c(estimates, standard_error, i, -1) |>
+                    matrix(nrow = 1) |>
+                    as.data.frame() |>
+                    setNames(colnames(result))
+            )
+
+            # Return the result
             return(result)
         }
     )
     estimates <- do.call("rbind", estimates)
 
-    # Do a variance decomposition and compute the ICC for each of the estimated
-    # parameters
-    cols <- colnames(estimates)
-    cols <- cols[-which(cols %in% c("participant", "bin"))]
+    # Prepare the estimates for analysis 
+    cols <- c("intercept", paste0("slope_", 2:ncol(params) - 1))
+    params <- params |>
+        as.data.frame() |>
+        setNames(cols)
 
-    icc <- lapply(
-        cols,
-        function(x) {
-            # Select the correct data and change the names as appropriate
-            data <- estimates[, c(x, "participant", "bin")] |>
-                setNames(c("param", "participant", "bin"))
+    prepared <- prepare(estimates, params)
 
-            # Do the variance decomposition through lmer
-            result <- lme4::lmer(
-                data = data, 
-                param ~ 1 + (1 | participant)
-            )
-
-            # Get a summary of the estimation from lmer and extract the 
-            # variance components of interest from the model, it being the 
-            # systematic variance and the total variance
-            fit <- summary(result)
-    
-            systematic <- as.numeric(fit$varcor[1])
-            residual <- as.numeric(fit$sigma^2)
-
-            # Compute the ICC(A, 1) for this parameter and return as the result
-            # of the procedure
-            return(
-                list(
-                    "icc" = systematic / (systematic + residual),
-                    "systematic" = systematic, 
-                    "residual" = residual
-                )
-            )
-        }
+    # Loop over all the statistical analyses we want to do on these data and 
+    # provide the result with a useful name
+    results <- lapply(
+        statistics, 
+        \(fx) fx(prepared)
     )
-    names(icc) <- cols  
+    names(results) <- names(statistics)
 
     # Save all results in the path if requested
     if(save_results) {
@@ -343,10 +255,10 @@ test_retest <- function(sim_model,
             file.path(path, paste0(filename, "_estimates.RDS"))
         )
         saveRDS(
-            icc,
-            file.path(path, paste0(filename, "_icc.RDS"))
+            results,
+            file.path(path, paste0(filename, "_results.RDS"))
         )
     }
     
-    return(icc)
+    return(results)
 }

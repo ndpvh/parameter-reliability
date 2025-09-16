@@ -1,5 +1,5 @@
 testthat::test_that(
-    "Check the output of parameter_grid",
+    "Check the output of parameter_grid when n_int and n_slope are defined",
     {
         # Make sequences of the parameter values
         params_1 <- seq(-10, 10, length.out = 5)
@@ -62,6 +62,60 @@ testthat::test_that(
         # Test for arx model
         tst <- paramrel::parameter_grid(paramrel::arx())
         testthat::expect_equal(tst, ref_arx)
+    }
+)
+
+testthat::test_that(
+    "Check the output of parameter_grid when n is defined",
+    {
+        # Test for linear model        
+        tst <- paramrel::parameter_grid(paramrel::linear(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 5 & tst[, 2] >= -5))
+
+        # Test for quadratic model        
+        tst <- paramrel::parameter_grid(paramrel::quadratic(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 5 & tst[, 2] >= -5))
+        testthat::expect_true(all(tst[, 3] <= 5 & tst[, 3] >= -5))
+
+        # Test for cubic model        
+        tst <- paramrel::parameter_grid(paramrel::cubic(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 5 & tst[, 2] >= -5))
+        testthat::expect_true(all(tst[, 3] <= 5 & tst[, 3] >= -5))
+        testthat::expect_true(all(tst[, 4] <= 5 & tst[, 4] >= -5))
+
+        # Test for main_effect model
+        tst <- paramrel::parameter_grid(paramrel::main_effect(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 5 & tst[, 2] >= -5))
+        testthat::expect_true(all(tst[, 3] <= 5 & tst[, 3] >= -5))
+
+        # Test for interaction model
+        tst <- paramrel::parameter_grid(paramrel::interaction(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 5 & tst[, 2] >= -5))
+        testthat::expect_true(all(tst[, 3] <= 5 & tst[, 3] >= -5))
+        testthat::expect_true(all(tst[, 4] <= 5 & tst[, 4] >= -5))
+
+        # Test for ar1 model
+        tst <- paramrel::parameter_grid(paramrel::ar1(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 0.99 & tst[, 2] >= -0.99))
+
+        # Test for arx model
+        tst <- paramrel::parameter_grid(paramrel::arx(), n = 100)
+        testthat::expect_equal(nrow(tst), 100)
+        testthat::expect_true(all(tst[, 1] <= 10 & tst[, 1] >= -10))
+        testthat::expect_true(all(tst[, 2] <= 0.99 & tst[, 2] >= -0.99))
+        testthat::expect_true(all(tst[, 3] <= 5 & tst[, 3] >= -5))
     }
 )
 
