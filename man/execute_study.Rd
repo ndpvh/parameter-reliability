@@ -13,7 +13,7 @@ execute_study(
   parameter_sd = 1,
   ICC = 1,
   R2 = NA,
-  save_results = TRUE,
+  save_results = FALSE,
   path = file.path("results"),
   filename = "results",
   statistics = list(descriptives = descriptives, signal = signal, icc = icc, accuracy =
@@ -62,7 +62,7 @@ model-specified residual standard deviation. Passed on to
 \code{\link[paramrel]{simulate}}}
 
 \item{save_results}{Logical denoting whether to save the results. Defaults to
-\code{TRUE}}
+\code{FALSE}}
 
 \item{path}{Path to the folder where you want to save the different results.
 Defaults to a folder \code{"results"} in the current working directory}

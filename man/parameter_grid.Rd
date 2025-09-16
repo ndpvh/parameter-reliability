@@ -4,11 +4,15 @@
 \alias{parameter_grid}
 \title{Generate parameter grid}
 \usage{
-parameter_grid(model, n_int = 5, n_slope = 5, ...)
+parameter_grid(model, n = NA, n_int = 5, n_slope = 5, ...)
 }
 \arguments{
 \item{model}{Object of one of the different model classes (e.g., linear, 
 quadratic,...)}
+
+\item{n}{Integer denoting the number of parameter sets to generate. Overwrites
+\code{n_int} and \code{n_slope} when specific. Defaults to \code{NA}, meaning 
+that \code{n_int} and \code{n_slope} are used by default.}
 
 \item{n_int}{Integer denoting the number of intercepts to draw. Needs to be 
 larger than or equal to 2. Defaults to \code{5}.}

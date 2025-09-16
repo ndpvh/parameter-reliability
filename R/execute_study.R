@@ -45,7 +45,7 @@
 #' and therefore the consistency with which they can be recovered. Defaults to 
 #' \code{1}, meaning that parameters don't change across bins.
 #' @param save_results Logical denoting whether to save the results. Defaults to
-#' \code{TRUE}
+#' \code{FALSE}
 #' @param path Path to the folder where you want to save the different results.
 #' Defaults to a folder \code{"results"} in the current working directory
 #' @param filename Character denoting the delineating name to be given to the 
@@ -67,7 +67,7 @@ execute_study <- function(sim_model,
                           parameter_sd = 1,
                           ICC = 1,
                           R2 = NA,
-                          save_results = TRUE,
+                          save_results = FALSE,
                           path = file.path("results"),
                           filename = "results",
                           statistics = list(
