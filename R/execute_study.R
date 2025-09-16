@@ -53,7 +53,7 @@
 #' files that contain the different results. Defaults to \code{"results"}
 #' @param statistics Named list containing single-argument functions that take 
 #' in the estimated and generating values of the parameters and perform analyses 
-#' on these values. Defaults to \code{icc}.
+#' on these values. Defaults to all functions defined in _statistics.R_.
 #' @param ... Additional arguments passed on to 
 #' \code{\link[paramrel]{simulate_x}} 
 #' 
@@ -72,7 +72,10 @@ execute_study <- function(sim_model,
                           path = file.path("results"),
                           filename = "results",
                           statistics = list(
-                              "icc" = icc
+                              "descriptives" = descriptives,
+                              "reliability" = reliability,
+                              "icc" = icc,
+                              "accuracy" = accuracy
                           ),
                           ...) {
 
@@ -222,13 +225,19 @@ execute_study <- function(sim_model,
     )
     estimates <- do.call("rbind", estimates)
 
-    # Loop over all the statistics we want to assess
+    # Prepare the estimates for analysis 
+    cols <- c("intercept", paste0("slope_", 2:ncol(params) - 1))
+    params <- params |>
+        as.data.frame() |>
+        setNames(cols)
+
+    prepared <- prepare(estimates, params)
+
+    # Loop over all the statistical analyses we want to do on these data and 
+    # provide the result with a useful name
     results <- lapply(
         statistics, 
-        \(fx) fx(
-            estimates,
-            params
-        )
+        \(fx) fx(prepared)
     )
     names(results) <- names(statistics)
 
