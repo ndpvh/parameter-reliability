@@ -188,7 +188,7 @@ execute_study <- function(sim_model,
 
             # Make a data.frame with useful labels and information on the person
             # and bins
-            cols <- c("intercept", paste0("slope_", 2:ncol(result) - 1))
+            cols <- c("intercept", paste0("slope_", 2:(ncol(result)/2) - 1))
             cols <- paste0(
                 rep(c("", "se_"), each = length(cols)),
                 rep(cols, times = 2)
@@ -196,7 +196,7 @@ execute_study <- function(sim_model,
 
             result <- result |>
                 as.data.frame() |>
-                setNames()
+                setNames(cols)
             result$participant <- i 
             result$bin <- 1:n_bins
 
