@@ -251,8 +251,8 @@ signal <- function(data) {
         function(x) {
             # Select the data of interest from the data.frame
             sim <- simulated[, x]
-            est <- estimates[, x]
-            se <- estimates[, paste0("se_", x)]
+            est <- estimated[, x]
+            se <- estimated[, paste0("se_", x)]
 
             # Compute the coefficient of variation
             cv <- ifelse(
@@ -312,8 +312,8 @@ accuracy <- function(data) {
         function(x) {
             # Select the data of interest from the data.frame
             sim <- simulated[, x]
-            est <- estimates[, x]
-            se <- estimates[, paste0("se_", x)]
+            est <- estimated[, x]
+            se <- estimated[, paste0("se_", x)]
 
             # Compute the average directed and undirected bias
             bias_directed <- mean(est - sim)
