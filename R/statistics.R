@@ -39,7 +39,7 @@ prepare <- function(estimated,
     } else if(ncol(estimated) < ncol(simulated)) {
         new_cols <- cols_sim[!(cols_sim %in% cols)]
         new_cols <- paste0(
-            rep(c("", "se_"), each = length(new_cols), 
+            rep(c("", "se_"), each = length(new_cols)), 
             rep(new_cols, times = 2)
         )
 
