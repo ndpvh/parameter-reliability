@@ -18,5 +18,3 @@ navbar:
         href: articles/project.html
       - text: Simulation
         href: articles/simulation.html
-      - text: Analysis
-        href: articles/analysis.html
