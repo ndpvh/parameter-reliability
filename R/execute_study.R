@@ -72,7 +72,7 @@ execute_study <- function(sim_model,
                           filename = "results",
                           statistics = list(
                               "descriptives" = descriptives,
-                              "reliability" = reliability,
+                              "signal" = signal,
                               "icc" = icc,
                               "accuracy" = accuracy
                           ),
