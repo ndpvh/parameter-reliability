@@ -1,8 +1,7 @@
 # PURPOSE: Test-retest reliability analysis for parameter reliability study
 # AUTHORS: Kenny Yu & Niels Vanhasbroeck
 # DATE: July 2025
-# FOCUS: Niels' test-retest analysis
-# STATUS: TO BE IMPLEMENTED BY NIELS
+# FOCUS: Providing a function to set up and execute our simulation study
 
 #' Set-up Study
 #' 
