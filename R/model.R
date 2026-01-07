@@ -26,6 +26,7 @@ model <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{model-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model. If left unspecified, an empty numeric vector. 
 #' @param sd Numeric defining the error around the deterministic part defined by 

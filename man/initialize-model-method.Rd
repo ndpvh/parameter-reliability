@@ -7,6 +7,8 @@
 \S4method{initialize}{model}(.Object, parameters = numeric(0), sd = 1)
 }
 \arguments{
+\item{.Object}{Model to initialize}
+
 \item{parameters}{Numeric vector containing the values of the parameters of 
 the model. If left unspecified, an empty numeric vector.}
 
