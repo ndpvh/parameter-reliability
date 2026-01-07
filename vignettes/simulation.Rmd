@@ -9,7 +9,7 @@ vignette: >
 
 This page will introduce some of the core functions and how to use them for the simulation. This follows the `simulation.R` file and makes some sense out of it.
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, include = FALSE}
 library(paramrel)
 ```
 
