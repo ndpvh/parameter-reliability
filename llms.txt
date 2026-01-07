@@ -1,0 +1,185 @@
+# Parameter reliability
+
+## Overview
+
+This project serves as a follow-up to the studies of Vanhasbroeck et
+al. (2024) and Yu et al. (2025) in which we investigated the reliability
+of the measurement of affect and perception respectively. Common across
+these two studies is the use of computational models to investigate this
+reliability. However, after additional thought, we both agreed that such
+an analysis may be faulty when models are misspecified.
+
+Within this project, then, we investigate to which extent we can rely on
+parameter estimates for misspecified models with the goal of detecting
+misspecification based on the reliability with which parameters are
+estimated across different blocks of experimental stimuli and/or by
+making the mechanisms with which misspecified models compensate for the
+misspecification explicit.
+
+## Installation
+
+To run the analyses in the script `simulation.R`, you need to first
+install the package that comes with this project. To do so, you should
+run:
+
+    remotes::install_github("ndpvh/parameter-reliability")
+
+You can then load these function through calling `library`,
+specifically:
+
+    library(paramrel)
+
+## Usage
+
+The documentation for the functions contained within this package can be
+found [here](https://ndpvh.github.io/parameter-reliability). More
+detailed explanation of this project can be found under the vignette
+[Project](https://ndpvh.github.io/parameter-reliability/articles/project.html).
+A more detailed explanation of how to use the relevant functions of the
+package can be found under the vignette
+[Simulation](https://ndpvh.github.io/parameter-reliability/articles/simulation.html).
+
+## Getting help
+
+If you encounter a bug, please file an issue with a minimal working
+example on
+[Github](https://github.com/ndpvh/parameter-reliability/issues).
+
+## References
+
+Vanhasbroeck, N., Vanbelle, S., Moors, A., Vanpaemel, W., & Tuerlinckx,
+F. (2024). Chasing consistency: On the measurement error in
+self-reported affect in experiments. Behavior Research Methods, 56(4),
+3009-3022. doi: 10.3758/s13428-023-02290-3
+
+Yu, K., Lin, T.-Y., Zaman, J., Tuerlinckx, F., & Vanhasbroeck, N.
+(2025). Consistency of perceptual response variability in size
+estimation and reproduction tasks. Behavior Research Methods, 57,
+Article 127. doi: 10.3758/s13428-025-02650-1
+
+# Package index
+
+## All functions
+
+- [`accuracy()`](https://github.com/ndpvh/parameter-reliability/reference/accuracy.md)
+  : Compute the Bias and MSE of the Estimates
+
+- [`ar1-class`](https://github.com/ndpvh/parameter-reliability/reference/ar1-class.md)
+  [`ar1`](https://github.com/ndpvh/parameter-reliability/reference/ar1-class.md)
+  : An S4 Class to Represent the ar1 Model.
+
+- [`arx-class`](https://github.com/ndpvh/parameter-reliability/reference/arx-class.md)
+  [`arx`](https://github.com/ndpvh/parameter-reliability/reference/arx-class.md)
+  : An S4 Class to Represent the ARX(1) Model.
+
+- [`bounds()`](https://github.com/ndpvh/parameter-reliability/reference/bounds-method.md)
+  : Get the Bounds of the Model
+
+- [`cubic-class`](https://github.com/ndpvh/parameter-reliability/reference/cubic-class.md)
+  [`cubic`](https://github.com/ndpvh/parameter-reliability/reference/cubic-class.md)
+  : An S4 Class to Represent the Cubic Model.
+
+- [`descriptives()`](https://github.com/ndpvh/parameter-reliability/reference/descriptives.md)
+  : Compute the Descriptive Statistics for the Parameters
+
+- [`estimate()`](https://github.com/ndpvh/parameter-reliability/reference/estimate-method.md)
+  : Estimate a Model from Data
+
+- [`execute_study()`](https://github.com/ndpvh/parameter-reliability/reference/execute_study.md)
+  : Set-up Study
+
+- [`generate_parameters()`](https://github.com/ndpvh/parameter-reliability/reference/generate_parameters.md)
+  : Generate a Random Parameter Set
+
+- [`icc()`](https://github.com/ndpvh/parameter-reliability/reference/icc.md)
+  : Compute the \\ICC(A, 1)\\ for Participant and Bin.
+
+- [`initialize(`*`<ar1>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-ar1-method.md)
+  :
+
+  Constructor for the
+  [`ar1-class`](https://rdrr.io/pkg/paramrel/man/ar1-class.html)
+
+- [`initialize(`*`<arx>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-arx-method.md)
+  :
+
+  Constructor for the
+  [`arx-class`](https://rdrr.io/pkg/paramrel/man/arx-class.html)
+
+- [`initialize(`*`<cubic>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-cubic-method.md)
+  :
+
+  Constructor for the
+  [`cubic-class`](https://rdrr.io/pkg/paramrel/man/cubic-class.html)
+
+- [`initialize(`*`<interaction>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-interaction-method.md)
+  :
+
+  Constructor for the
+  [`interaction-class`](https://rdrr.io/pkg/paramrel/man/interaction-class.html)
+
+- [`initialize(`*`<linear>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-linear-method.md)
+  :
+
+  Constructor for the
+  [`linear-class`](https://rdrr.io/pkg/paramrel/man/linear-class.html)
+
+- [`initialize(`*`<main_effect>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-main_effect-method.md)
+  :
+
+  Constructor for the
+  [`main_effect-class`](https://rdrr.io/pkg/paramrel/man/main_effect-class.html)
+
+- [`initialize(`*`<model>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-model-method.md)
+  :
+
+  Constructor for the
+  [`model-class`](https://rdrr.io/pkg/paramrel/man/model-class.html)
+
+- [`initialize(`*`<quadratic>`*`)`](https://github.com/ndpvh/parameter-reliability/reference/initialize-quadratic-method.md)
+  :
+
+  Constructor for the
+  [`quadratic-class`](https://rdrr.io/pkg/paramrel/man/quadratic-class.html)
+
+- [`interaction-class`](https://github.com/ndpvh/parameter-reliability/reference/interaction-class.md)
+  [`interaction`](https://github.com/ndpvh/parameter-reliability/reference/interaction-class.md)
+  : An S4 Class to Represent the Interaction Model.
+
+- [`linear-class`](https://github.com/ndpvh/parameter-reliability/reference/linear-class.md)
+  [`linear`](https://github.com/ndpvh/parameter-reliability/reference/linear-class.md)
+  : An S4 Class to Represent the Linear Model.
+
+- [`main_effect-class`](https://github.com/ndpvh/parameter-reliability/reference/main_effect-class.md)
+  [`main_effect`](https://github.com/ndpvh/parameter-reliability/reference/main_effect-class.md)
+  : An S4 Class to Represent the main_effect Effect Model.
+
+- [`model-class`](https://github.com/ndpvh/parameter-reliability/reference/model-class.md)
+  [`model`](https://github.com/ndpvh/parameter-reliability/reference/model-class.md)
+  : An S4 Class to Represent all Models.
+
+- [`parameter_grid()`](https://github.com/ndpvh/parameter-reliability/reference/parameter_grid.md)
+  : Generate parameter grid
+
+- [`prepare()`](https://github.com/ndpvh/parameter-reliability/reference/prepare.md)
+  : Prepare True and Estimated Parameters for Analysis
+
+- [`quadratic-class`](https://github.com/ndpvh/parameter-reliability/reference/quadratic-class.md)
+  [`quadratic`](https://github.com/ndpvh/parameter-reliability/reference/quadratic-class.md)
+  : An S4 Class to Represent the Quadratic Model.
+
+- [`signal()`](https://github.com/ndpvh/parameter-reliability/reference/signal.md)
+  : Compute the Signal-based Metrics on Standard Errors
+
+- [`simulate()`](https://github.com/ndpvh/parameter-reliability/reference/simulate-method.md)
+  : Simulate Data from a Model
+
+- [`simulate_x()`](https://github.com/ndpvh/parameter-reliability/reference/simulate_x-method.md)
+  : Simulate Values for the Independent Variable for a Model
+
+# Articles
+
+### All vignettes
+
+- [Project](https://github.com/ndpvh/parameter-reliability/articles/project.md):
+- [Simulation](https://github.com/ndpvh/parameter-reliability/articles/simulation.md):
