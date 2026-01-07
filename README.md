@@ -38,7 +38,7 @@ If you encounter a bug, please file an issue with a minimal working example on [
 
 ## References
 
-Vanhasbroeck, N., Vanbelle, S., Moors, A., Vanpaemel, W., & Tuerlinckx, F. (2024). Chasing consistency: On the measurement error in self-reported affect in experiments. Behavior Research Methods, 56(4), 3009-3022. doi: 10.3758/s13428-023-02290-3
+Vanhasbroeck, N., Vanbelle, S., Moors, A., Vanpaemel, W., & Tuerlinckx, F. (2024). Chasing consistency: On the measurement error in self-reported affect in experiments. _Behavior Research Methods, 56_(4), 3009-3022. doi: <a href="https://www.doi.org/10.3758/s13428-023-02290-3">10.3758/s13428-023-02290-3</a>
 
-Yu, K., Lin, T.-Y., Zaman, J., Tuerlinckx, F., & Vanhasbroeck, N. (2025). Consistency of perceptual response variability in size estimation and reproduction tasks. Behavior Research Methods, 57, Article 127. doi: 10.3758/s13428-025-02650-1
+Yu, K., Lin, T.-Y., Zaman, J., Tuerlinckx, F., & Vanhasbroeck, N. (2025). Consistency of perceptual response variability in size estimation and reproduction tasks. _Behavior Research Methods, 57_, Article 127. doi: <a href="https://www.doi.org/10.3758/s13428-025-02650-1">10.3758/s13428-025-02650-1</a>
 
