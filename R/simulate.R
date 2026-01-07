@@ -10,16 +10,16 @@
 #' @param model Object of one of the different model classes (e.g., linear, 
 #' quadratic,...)
 #' @param X Numeric vector or matrix containing the values of the independent 
-#' variables. For \code{\link[param-rel]{linear-class}}, 
-#' \code{\link[param-rel]{quadratic-class}}, \code{\link[param-rel]{arx-class}},
+#' variables. For \code{\link[paramrel]{linear-class}}, 
+#' \code{\link[paramrel]{quadratic-class}}, \code{\link[paramrel]{arx-class}},
 #' a numeric vector suffices, as only one independent variable is required. For 
-#' \code{\link[param-rel]{main_effect-class}} and 
-#' \code{\link[param-rel]{interaction-class}}, a matrix is needed instead, where 
+#' \code{\link[paramrel]{main_effect-class}} and 
+#' \code{\link[paramrel]{interaction-class}}, a matrix is needed instead, where 
 #' the first column is taken to be \eqn{x} (paired with parameter \eqn{b}) and 
 #' the second column is taken to be \eqn{z} (paired with parameter \eqn{c}). For
-#' the \code{\link[param-rel]{ar1-class}}, this argument is ignored.
+#' the \code{\link[paramrel]{ar1-class}}, this argument is ignored.
 #' Defaults to \code{NULL}, forcing the user to specify its value for all models
-#' except for the \code{\link[param-rel]{ar1-class}}, or alternatively
+#' except for the \code{\link[paramrel]{ar1-class}}, or alternatively
 #' to specify a function with which to generate values of \code{X} through the
 #' \code{Xfun} argument.
 #' @param Xfun Function with which to simulate values for \code{X}. Should take 
