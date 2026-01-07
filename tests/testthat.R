@@ -8,6 +8,7 @@
 
 library(testthat)
 library(paramrel)
+library(dplyr)
 
 RNGkind(kind = "Mersenne-Twister")
 
