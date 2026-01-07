@@ -11,7 +11,7 @@
 \alias{simulate_x,arx-method}
 \title{Simulate Values for the Independent Variable for a Model}
 \usage{
-simulate_x(model, Xfun, N)
+simulate_x(model, ...)
 
 \S4method{simulate_x}{linear}(model, Xfun = function(x) runif(x, -2, 2), N = 100)
 
@@ -38,6 +38,9 @@ simulate_x(model, Xfun, N)
 \arguments{
 \item{model}{Object of one of the different model classes (e.g., linear, 
 quadratic,...)}
+
+\item{...}{Arguments passed on to lower functions. Contains \code{Xfun} and 
+\code{N} in the generic of \code{simulate_x}}
 
 \item{Xfun}{One or more functions with which to simulate values for the independent 
 variable(s). Should take in only a single argument, namely \code{N}, 

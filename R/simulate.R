@@ -727,6 +727,8 @@ double_x <- function(model,
 #' distribution bounded between -2 and 2.
 #' @param N Integer denoting the number of values that should be simulated. 
 #' Defaults to \code{100}.
+#' @param ... Arguments passed on to lower functions. Contains \code{Xfun} and 
+#' \code{N} in the generic of \code{simulate_x}
 #' 
 #' @return Matrix containing the values of the independent variables
 #' 
@@ -749,7 +751,7 @@ double_x <- function(model,
 #' @export
 setGeneric(
     "simulate_x",
-    function(model, Xfun, N) standardGeneric("simulate_x"),
+    function(model, ...) standardGeneric("simulate_x"),
     signature = "model"
 )
 
