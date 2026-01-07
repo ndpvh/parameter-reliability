@@ -7,9 +7,14 @@
 \S4method{initialize}{quadratic}(.Object, parameters = c(0, 0, 0), sd = 1)
 }
 \arguments{
+\item{.Object}{Model to initialize}
+
 \item{parameters}{Numeric vector containing the values of the parameters of 
 the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 unspecified, the parameters will default to \code{c(0, 0, 0)}.}
+
+\item{sd}{Numeric defining the error around the deterministic part defined by 
+the argument \code{parameters}. If left unspecified, will default to \code{1}}
 }
 \description{
 Constructor for the \code{\link[paramrel]{quadratic-class}}

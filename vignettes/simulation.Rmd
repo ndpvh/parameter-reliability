@@ -9,12 +9,16 @@ vignette: >
 
 This page will introduce some of the core functions and how to use them for the simulation. This follows the `simulation.R` file and makes some sense out of it.
 
+```{r, echo = FALSE}
+library(paramrel)
+```
+
 ## Models 
 
 The first thing to understand are the models, which are defined in `model.R`. These S4 classes define all models that we use in our simulation study. A model consists of a set of parameters and a within-person standard deviation, which can be provided values through the attributes `parameters` and `sd`. For example, creating a linear model and calling it `my_model`, we get:
 
 ```{r}
-my_model <- paramrel::linear(
+my_model <- linear(
     parameters = c(10, 5),
     sd = 2
 )
@@ -41,7 +45,7 @@ my_model@sd
 Note that to initialize a model, you do not necessarily have to specify the arguments:
 
 ```{r}
-my_model <- paramrel::linear()
+my_model <- linear()
 
 my_model@parameters 
 my_model@sd
@@ -56,9 +60,9 @@ Instead, the default parameter settings are used.
 The primary function to use for generating parameters is `parameter_grid`, which will create a given number of parameter sets for a particular model. Using this function only requires passing down the model you are interested in. For example, for the linear model, we can do:
 
 ```{r}
-my_model <- paramrel::linear()
+my_model <- linear()
 
-params <- paramrel::parameter_grid(my_model)
+params <- parameter_grid(my_model)
 head(params)
 ```
 
@@ -67,14 +71,14 @@ The output of this function is a matrix of size $n \times k$, where $n$ is the n
 Through additional arguments, we can control the parameter generation process. Specifically, one can change the number of parameter sets that are being generated, the process that is used for the generation of the parameters, and the bounds of the parameters. Focusing first on the number of parameters that are generated, one can change the values of `n_int` and `n_slope`, respectively denoting the number of different intercepts and slopes one wants to generate. For example:
 
 ```{r}
-params <- paramrel::parameter_grid(
+params <- parameter_grid(
     my_model,
     n_int = 10, 
     n_slope = 10
 )
 head(params)
 
-params <- paramrel::parameter_grid(
+params <- parameter_grid(
     my_model,
     n_int = 20, 
     n_slope = 20
@@ -87,7 +91,7 @@ The first piece of code results in a $100 \times 2$ matrix while the second piec
 While this type of simulation allows for a well-controlled simulation study, it may lack some generalizability across different simulation studies when the number of unique parameters differs greatly. We therefore allow for another type of parameter generation process through specifying the argument `n`, for example:
 
 ```{r}
-params <- paramrel::parameter_grid(
+params <- parameter_grid(
     my_model,
     n = 100
 )
@@ -99,7 +103,7 @@ This will output a $100 \times k$ parameter matrix, no matter which model you pr
 Finally, you can change the bounds of the intercepts and slopes through the `intercept` and `slope` parameters, where you provide a minimum and maximum value for the parameter. For example:
 
 ```{r}
-params <- paramrel::parameter_grid(
+params <- parameter_grid(
     my_model,
     n = 10,
     intercept = c(-1, 1),
@@ -107,7 +111,7 @@ params <- paramrel::parameter_grid(
 )
 head(params)
 
-params <- paramrel::parameter_grid(
+params <- parameter_grid(
     my_model,
     n = 10,
     intercept = c(-100, 100),
@@ -123,10 +127,10 @@ head(params)
 The heavy lifting for running a simulation is done by the `execute_study` function. At minimum, this function requires a generative and an estimation model to be defined, so that you can call:
 
 ```{r, eval = FALSE}
-sim_model <- paramrel::linear()
-est_model <- paramrel::quadratic()
+sim_model <- linear()
+est_model <- quadratic()
 
-paramrel::execute_study(
+execute_study(
     sim_model, 
     est_model
 )
@@ -142,10 +146,10 @@ The most important arguments that you can change in this function are the follow
 Through changing the values of the arguments, we can run a small simulation study as:
 
 ```{r}
-sim_model <- paramrel::linear()
-est_model <- paramrel::quadratic()
+sim_model <- linear()
+est_model <- quadratic()
 
-paramrel::execute_study(
+execute_study(
     sim_model, 
     est_model,
     n_participants = 10, 
@@ -153,8 +157,8 @@ paramrel::execute_study(
     n_bins = 5, 
     ICC = 0.8,
     statistics = list(
-        "icc" = paramrel::icc, 
-        "signal" = paramrel::signal
+        "icc" = icc, 
+        "signal" = signal
     )
 )
 ```

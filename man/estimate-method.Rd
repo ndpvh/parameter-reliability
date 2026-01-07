@@ -11,7 +11,7 @@
 \alias{estimate,arx-method}
 \title{Estimate a Model from Data}
 \usage{
-estimate(model, ...)
+estimate(model, data)
 
 \S4method{estimate}{linear}(model, data)
 
@@ -43,4 +43,18 @@ model with estimated parameters under \code{"model"}
 \description{
 Estimation of the different models from a particular data set. Uses the 
 \code{lm} function under the hood.
+}
+\examples{
+# Example given for the linear model, but also possible for other models
+x <- rnorm(100)
+data <- data.frame(
+  x = x, 
+  y = 3 + 10 * x + rnorm(100)
+)
+
+estimate(
+  linear(),
+  data
+)
+
 }

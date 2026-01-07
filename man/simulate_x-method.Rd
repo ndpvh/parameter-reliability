@@ -11,7 +11,7 @@
 \alias{simulate_x,arx-method}
 \title{Simulate Values for the Independent Variable for a Model}
 \usage{
-simulate_x(model, ...)
+simulate_x(model, Xfun, N)
 
 \S4method{simulate_x}{linear}(model, Xfun = function(x) runif(x, -2, 2), N = 100)
 
@@ -52,4 +52,19 @@ Matrix containing the values of the independent variables
 }
 \description{
 Simulate Values for the Independent Variable for a Model
+}
+\examples{
+# Create a linear model
+model <- linear(
+  parameters = c(0, 10),
+  sd = 1
+)
+
+# Simulate values for X for this model
+simulate_x(
+  model,
+  Xfun = \(x) rnorm(x, mean = 0, sd = 1),
+  N = 10
+)
+
 }

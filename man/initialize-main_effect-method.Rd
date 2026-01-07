@@ -7,6 +7,8 @@
 \S4method{initialize}{main_effect}(.Object, parameters = c(0, 0, 0), sd = 1)
 }
 \arguments{
+\item{.Object}{Model to initialize}
+
 \item{parameters}{Numeric vector containing the values of the parameters of 
 the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 unspecified, the model will default to \code{c(0, 0, 0)}.}

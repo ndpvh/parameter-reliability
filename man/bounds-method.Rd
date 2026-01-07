@@ -30,6 +30,14 @@ bounds(model, ...)
 \arguments{
 \item{model}{Object of one of the different model classes (e.g., linear, 
 quadratic,...)}
+
+\item{...}{Additional arguments provided to the model of choice.}
+
+\item{intercept}{Numeric vector with two values denoting the lower and upper
+bound of the intercept parameter. Defaults to \code{c(-10, 10)}.}
+
+\item{slope}{Numeric vector with two values denoting the lower and upper 
+bound of all slope parameters for the covariates. Defaults to \code{c(-5, 5)}.}
 }
 \value{
 Matrix where the left/right column specifies the lower/upper bounds 
@@ -37,4 +45,15 @@ of the parameters in the order specified in the description of the models
 }
 \description{
 Get the Bounds of the Model
+}
+\examples{
+# Example given for the linear model, but also possible for the other models
+bounds(linear())
+
+bounds(
+  linear(),
+  intercept = c(-10, 10),
+  slope = c(0, 10)
+)
+
 }

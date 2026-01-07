@@ -11,7 +11,7 @@
 \alias{simulate,arx-method}
 \title{Simulate Data from a Model}
 \usage{
-simulate(model, ...)
+simulate(model, X, Xfun, N, R2)
 
 \S4method{simulate}{linear}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
@@ -59,10 +59,10 @@ to specify a function with which to generate values of \code{X} through the
 
 \item{Xfun}{Function with which to simulate values for \code{X}. Should take 
 in only a single argument, namely \code{N}, specifying how many values for
-\code{X} to simulate. Defaults to \code{NULL}, forcing the user to either 
-specify \code{X} or \code{Xfun}. Note that the output of \code{Xfun} is used 
-as an alternative to \code{X}, meaning that it should conform to distinction 
-between numeric vector and numeric matrix specified for the \code{X} argument.}
+\code{X} to simulate. Defaults to a uniform distribution between \code{-2} and
+\code{2}. Note that the output of \code{Xfun} is used as an alternative to 
+\code{X}, meaning that it should conform to distinction between numeric 
+vector and numeric matrix specified for the \code{X} argument.}
 
 \item{N}{Integer denoting the number of values that should be simulated. 
 Ignored when \code{X} is defined. Defaults to \code{100}.}
@@ -80,4 +80,28 @@ and if applicable \eqn{z}, named as such) and time (\code{time})
 \description{
 Method for the different models that allows the simulation of data for these
 models.
+}
+\examples{
+# Example given with the linear model, but extends to other models as well.
+model <- linear(
+  parameters = c(0, 10),
+  sd = 1
+)
+
+# Simulate for the linear model described above with values for the predictor
+# drawn from a standard normal distribution
+simulate(
+  model, 
+  X = rnorm(10, mean = 0, sd = 1)
+)
+
+# You can also provide your own function to generate the predictor X to the 
+# function. This is especially useful if this predictor is subject to more 
+# complicated computations, such as the generation of gambling stimuli
+simulate(
+  model,
+  Xfun = \(x) rnorm(x, mean = 0, sd = 1),
+  N = 10
+)
+
 }

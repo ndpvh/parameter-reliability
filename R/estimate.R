@@ -14,13 +14,24 @@
 #' model with estimated parameters under \code{"model"}
 #' 
 #' @examples 
+#' # Example given for the linear model, but also possible for other models
+#' x <- rnorm(100)
+#' data <- data.frame(
+#'   x = x, 
+#'   y = 3 + 10 * x + rnorm(100)
+#' )
+#' 
+#' estimate(
+#'   linear(),
+#'   data
+#' )
 #' 
 #' @rdname estimate-method
 #' 
 #' @export
 setGeneric(
     "estimate",
-    function(model, ...) standardGeneric("estimate"),
+    function(model, data) standardGeneric("estimate"),
     signature = "model"
 )
 

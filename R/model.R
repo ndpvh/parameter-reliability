@@ -84,6 +84,7 @@ linear <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{linear-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, 
 #' the parameters will default to \code{c(0, 0)}. 
@@ -153,9 +154,12 @@ quadratic <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{quadratic-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the parameters will default to \code{c(0, 0, 0)}.  
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
@@ -220,9 +224,12 @@ cubic <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{cubic-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, \eqn{c}, and \eqn{d} in this order. If left 
 #' unspecified, the parameters will default to \code{c(0, 0, 0, 0)}.  
+#' @param sd Numeric defining the error around the deterministic part defined by 
+#' the argument \code{parameters}. If left unspecified, will default to \code{1}
 #' 
 #' @export
 setMethod(
@@ -287,6 +294,7 @@ main_effect <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{main_effect-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}. 
@@ -357,6 +365,7 @@ interaction <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{interaction-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, \eqn{c}, and \eqn{d} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0, 0)}.
@@ -426,6 +435,7 @@ ar1 <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{ar1-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a} and \eqn{b} in this order. If left unspecified, the 
 #' model will default to \code{c(0, 0)}.
@@ -495,6 +505,7 @@ arx <- setClass(
 
 #' Constructor for the \code{\link[paramrel]{arx-class}}
 #' 
+#' @param .Object Model to initialize
 #' @param parameters Numeric vector containing the values of the parameters of 
 #' the model, namely \eqn{a}, \eqn{b}, and \eqn{c} in this order. If left 
 #' unspecified, the model will default to \code{c(0, 0, 0)}.
