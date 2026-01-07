@@ -1,7 +1,7 @@
 Package: paramrel
 Type: Package
 Title: Parameter Reliability
-Version: 1.0
+Version: 0.1.0
 Date: 2025-06-30
 Description: Side project of Kenny and I.
 Authors@R: c(
