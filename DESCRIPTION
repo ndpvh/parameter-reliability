@@ -3,7 +3,7 @@ Type: Package
 Title: Parameter Reliability
 Version: 1.0
 Date: 2025-06-30
-Description: Side project of Kenny and I
+Description: Side project of Kenny and I.
 Author: c(
     person(
         "Niels", 
@@ -21,7 +21,7 @@ Author: c(
 Maintainer: Niels Vanhasbroeck <niels.vanhasbroeck@gmail.com>
 URL: https://github.com/ndpvh/parameter-reliability
 BugReports: https://github.com/ndpvh/parameter-reliability/issues
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
