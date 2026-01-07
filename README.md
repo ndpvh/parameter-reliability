@@ -1,5 +1,5 @@
 <!-- badges: start -->
-[![Documentation](https://img.shields.io/badge/documentation-v0.1.0)](https://ndpvh.github.io/parameter-reliability)
+[![Documentation](https://img.shields.io/badge/documentation-v0.1.0-blue)](https://ndpvh.github.io/parameter-reliability)
 [![R-CMD-check](https://github.com/ndpvh/parameter-reliability/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ndpvh/parameter-reliability/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/ndpvh/parameter-reliability/graph/badge.svg)](https://app.codecov.io/gh/ndpvh/parameter-reliability)
