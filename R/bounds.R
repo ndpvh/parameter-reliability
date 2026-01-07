@@ -2,11 +2,20 @@
 #'
 #' @param model Object of one of the different model classes (e.g., linear, 
 #' quadratic,...)
+#' @param ... Additional arguments provided to the model of choice.
 #' 
 #' @return Matrix where the left/right column specifies the lower/upper bounds 
 #' of the parameters in the order specified in the description of the models
 #' 
 #' @examples 
+#' # Example given for the linear model, but also possible for the other models
+#' bounds(linear())
+#' 
+#' bounds(
+#'   linear(),
+#'   intercept = c(-10, 10),
+#'   slope = c(0, 10)
+#' )
 #' 
 #' @rdname bounds-method
 #' 
@@ -21,6 +30,11 @@ setGeneric(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters. Defaults to \code{c(-5, 5)}.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",
@@ -41,6 +55,11 @@ setMethod(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters. Defaults to \code{c(-5, 5)}.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",
@@ -61,6 +80,11 @@ setMethod(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters. Defaults to \code{c(-5, 5)}.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",
@@ -81,6 +105,11 @@ setMethod(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters. Defaults to \code{c(-5, 5)}.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",
@@ -101,6 +130,11 @@ setMethod(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters. Defaults to \code{c(-5, 5)}.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",
@@ -121,6 +155,11 @@ setMethod(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters. Ignored for this model.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",
@@ -141,6 +180,11 @@ setMethod(
 
 
 
+#' @param intercept Numeric vector with two values denoting the lower and upper
+#' bound of the intercept parameter. Defaults to \code{c(-10, 10)}.
+#' @param slope Numeric vector with two values denoting the lower and upper 
+#' bound of all slope parameters for the covariates. Defaults to \code{c(-5, 5)}.
+#' 
 #' @rdname bounds-method
 setMethod(
     "bounds",

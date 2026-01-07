@@ -39,6 +39,9 @@ simulate_x(model, ...)
 \item{model}{Object of one of the different model classes (e.g., linear, 
 quadratic,...)}
 
+\item{...}{Arguments passed on to lower functions. Contains \code{Xfun} and 
+\code{N} in the generic of \code{simulate_x}}
+
 \item{Xfun}{One or more functions with which to simulate values for the independent 
 variable(s). Should take in only a single argument, namely \code{N}, 
 specifying how many values for \code{X} to simulate. Defaults to a uniform 
@@ -52,4 +55,19 @@ Matrix containing the values of the independent variables
 }
 \description{
 Simulate Values for the Independent Variable for a Model
+}
+\examples{
+# Create a linear model
+model <- linear(
+  parameters = c(0, 10),
+  sd = 1
+)
+
+# Simulate values for X for this model
+simulate_x(
+  model,
+  Xfun = \(x) rnorm(x, mean = 0, sd = 1),
+  N = 10
+)
+
 }

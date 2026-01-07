@@ -1,4 +1,6 @@
-devtools::load_all()
+library(paramrel)
+library(parallel)
+library(dplyr)
 
 ################################################################################
 # PRELIMINARIES

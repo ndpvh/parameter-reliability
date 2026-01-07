@@ -1,9 +1,9 @@
 Package: paramrel
 Type: Package
 Title: Parameter Reliability
-Version: 1.0
+Version: 0.1.0
 Date: 2025-06-30
-URL: https://github.com/ndpvh/parameter-reliability
+Description: Side project of Kenny and I.
 Authors@R: c(
     person(
         "Niels", 
@@ -17,22 +17,19 @@ Authors@R: c(
         "Yu", 
         email = "kenny.yu@kuleuven.be",
         comment = c(ORCID = "0000-0002-0665-9354"),
-        role = "aut"
-    ))
-License: GPL-3
+        role = "aut"))
+Maintainer: Niels Vanhasbroeck <niels.vanhasbroeck@gmail.com>
+URL: https://github.com/ndpvh/parameter-reliability
+BugReports: https://github.com/ndpvh/parameter-reliability/issues
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    ggplot2,
-    tidyr,
-    dplyr,
     methods,
-    latex2exp,
-    magrittr,
-    gridExtra,
-    reshape2
+    stats
 RoxygenInfo: 7.3.2
 Collate:
+    'paramrel-package.R'
     'model.R'
     'parameters.R'
     'simulate.R'

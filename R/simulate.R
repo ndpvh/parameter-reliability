@@ -10,24 +10,24 @@
 #' @param model Object of one of the different model classes (e.g., linear, 
 #' quadratic,...)
 #' @param X Numeric vector or matrix containing the values of the independent 
-#' variables. For \code{\link[param-rel]{linear-class}}, 
-#' \code{\link[param-rel]{quadratic-class}}, \code{\link[param-rel]{arx-class}},
+#' variables. For \code{\link[paramrel]{linear-class}}, 
+#' \code{\link[paramrel]{quadratic-class}}, \code{\link[paramrel]{arx-class}},
 #' a numeric vector suffices, as only one independent variable is required. For 
-#' \code{\link[param-rel]{main_effect-class}} and 
-#' \code{\link[param-rel]{interaction-class}}, a matrix is needed instead, where 
+#' \code{\link[paramrel]{main_effect-class}} and 
+#' \code{\link[paramrel]{interaction-class}}, a matrix is needed instead, where 
 #' the first column is taken to be \eqn{x} (paired with parameter \eqn{b}) and 
 #' the second column is taken to be \eqn{z} (paired with parameter \eqn{c}). For
-#' the \code{\link[param-rel]{ar1-class}}, this argument is ignored.
+#' the \code{\link[paramrel]{ar1-class}}, this argument is ignored.
 #' Defaults to \code{NULL}, forcing the user to specify its value for all models
-#' except for the \code{\link[param-rel]{ar1-class}}, or alternatively
+#' except for the \code{\link[paramrel]{ar1-class}}, or alternatively
 #' to specify a function with which to generate values of \code{X} through the
 #' \code{Xfun} argument.
 #' @param Xfun Function with which to simulate values for \code{X}. Should take 
 #' in only a single argument, namely \code{N}, specifying how many values for
-#' \code{X} to simulate. Defaults to \code{NULL}, forcing the user to either 
-#' specify \code{X} or \code{Xfun}. Note that the output of \code{Xfun} is used 
-#' as an alternative to \code{X}, meaning that it should conform to distinction 
-#' between numeric vector and numeric matrix specified for the \code{X} argument.
+#' \code{X} to simulate. Defaults to a uniform distribution between \code{-2} and
+#' \code{2}. Note that the output of \code{Xfun} is used as an alternative to 
+#' \code{X}, meaning that it should conform to distinction between numeric 
+#' vector and numeric matrix specified for the \code{X} argument.
 #' @param N Integer denoting the number of values that should be simulated. 
 #' Ignored when \code{X} is defined. Defaults to \code{100}.
 #' @param R2 Numeric between 0 and 1 denoting the \eqn{R^2} of the model. If 
@@ -35,11 +35,34 @@
 #' determinstic part of the model to have an \eqn{R^2} as specified. Defaults to
 #' \code{NA}, triggering the use of the model-specified residual standard 
 #' deviation
+#' @param ... Arguments passed on to lower functions. Contains all other arguments
+#' explained within this function.
 #' 
 #' @return Dataframe containing the values of the variables (\eqn{y}, \eqn{x}, 
 #' and if applicable \eqn{z}, named as such) and time (\code{time})
 #' 
 #' @examples 
+#' # Example given with the linear model, but extends to other models as well.
+#' model <- linear(
+#'   parameters = c(0, 10),
+#'   sd = 1
+#' )
+#' 
+#' # Simulate for the linear model described above with values for the predictor
+#' # drawn from a standard normal distribution
+#' simulate(
+#'   model, 
+#'   X = rnorm(10, mean = 0, sd = 1)
+#' )
+#' 
+#' # You can also provide your own function to generate the predictor X to the 
+#' # function. This is especially useful if this predictor is subject to more 
+#' # complicated computations, such as the generation of gambling stimuli
+#' simulate(
+#'   model,
+#'   Xfun = \(x) rnorm(x, mean = 0, sd = 1),
+#'   N = 10
+#' )
 #' 
 #' @rdname simulate-method
 #' 
@@ -706,10 +729,24 @@ double_x <- function(model,
 #' distribution bounded between -2 and 2.
 #' @param N Integer denoting the number of values that should be simulated. 
 #' Defaults to \code{100}.
+#' @param ... Arguments passed on to lower functions. Contains \code{Xfun} and 
+#' \code{N} in the generic of \code{simulate_x}
 #' 
 #' @return Matrix containing the values of the independent variables
 #' 
 #' @examples 
+#' # Create a linear model
+#' model <- linear(
+#'   parameters = c(0, 10),
+#'   sd = 1
+#' )
+#' 
+#' # Simulate values for X for this model
+#' simulate_x(
+#'   model,
+#'   Xfun = \(x) rnorm(x, mean = 0, sd = 1),
+#'   N = 10
+#' )
 #' 
 #' @rdname simulate_x-method
 #' 
