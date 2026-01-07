@@ -4,7 +4,7 @@ Title: Parameter Reliability
 Version: 1.0
 Date: 2025-06-30
 Description: Side project of Kenny and I.
-Author: c(
+Authors@R: c(
     person(
         "Niels", 
         "Vanhasbroeck", 
