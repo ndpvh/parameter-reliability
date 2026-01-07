@@ -35,6 +35,8 @@
 #' determinstic part of the model to have an \eqn{R^2} as specified. Defaults to
 #' \code{NA}, triggering the use of the model-specified residual standard 
 #' deviation
+#' @param ... Arguments passed on to lower functions. Contains all other arguments
+#' explained within this function.
 #' 
 #' @return Dataframe containing the values of the variables (\eqn{y}, \eqn{x}, 
 #' and if applicable \eqn{z}, named as such) and time (\code{time})
@@ -67,7 +69,7 @@
 #' @export
 setGeneric(
     "simulate",
-    function(model, X, Xfun, N, R2) standardGeneric("simulate"),
+    function(model, ...) standardGeneric("simulate"),
     signature = "model"
 )
 

@@ -11,7 +11,7 @@
 \alias{simulate,arx-method}
 \title{Simulate Data from a Model}
 \usage{
-simulate(model, X, Xfun, N, R2)
+simulate(model, ...)
 
 \S4method{simulate}{linear}(model, X = NULL, Xfun = function(x) runif(x, -2, 2), N = 100, R2 = NA)
 
@@ -42,6 +42,9 @@ simulate(model, X, Xfun, N, R2)
 \arguments{
 \item{model}{Object of one of the different model classes (e.g., linear, 
 quadratic,...)}
+
+\item{...}{Arguments passed on to lower functions. Contains all other arguments
+explained within this function.}
 
 \item{X}{Numeric vector or matrix containing the values of the independent 
 variables. For \code{\link[param-rel]{linear-class}}, 
