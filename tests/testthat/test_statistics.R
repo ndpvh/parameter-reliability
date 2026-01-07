@@ -10,11 +10,9 @@ testthat::test_that(
             se_param_1 = rep(0.1, 10),
             se_param_2 = rep(0.2, 10)
         )
-        est_2 <- est_1 |>
-            dplyr::mutate(
-                param_3 = 10 + param_1,
-                se_param_3 = 0.2 + se_param_1
-            )
+        est_2 <- est_1 
+        est_2$param_3 <- 10 + est_2$param_1
+        est_2$se_param_3 <- 0.2 + se_param_1
 
         sim_1 <- data.frame(
             param_1 = 2 * est_1$param_1, 
