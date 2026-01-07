@@ -25,16 +25,11 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    ggplot2,
-    tidyr,
-    dplyr,
     methods,
-    latex2exp,
-    magrittr,
-    gridExtra,
-    reshape2
+    stats
 RoxygenInfo: 7.3.2
 Collate:
+    'paramrel-package.R'
     'model.R'
     'parameters.R'
     'simulate.R'
